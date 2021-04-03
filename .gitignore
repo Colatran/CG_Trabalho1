@@ -577,3 +577,6 @@ tags
 *.log
 node_modules/
 coverage/
+*.sln
+*.vcxproj
+*.filters
