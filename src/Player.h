@@ -1,13 +1,17 @@
 #pragma once
 #include "Entity.h"
 
-class Player : public Entity
-{
+class Player : public Entity {
+private:
+	const float speed = 2;
+
 public:
-	Player(float x, float y);
+	Player(Vector location);
 	~Player();
 	void draw() override;
+	void move() override;
 	void die() override;
+protected:
 	void reactToEntity(Entity *entity) override;
 };
 

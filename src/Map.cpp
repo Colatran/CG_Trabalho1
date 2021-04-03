@@ -1,7 +1,9 @@
 #include "Map.h"
 #include <gl/glut.h>
 #include <math.h>
-#define ORIGIN 125
+
+#include <iostream>
+using namespace std;
 
 Map* Map::ref;
 
@@ -19,3 +21,14 @@ void Map::draw() {
 }
 void Map::DecreaseMap() { if (radius > 0) radius -= 5.0f; }
 void Map::IncreaseMap() { if (radius < 120) radius += 5.0f; }
+
+float Map::RandomFloat(float min, float max) {
+	float random = ((float)rand()) / (float)RAND_MAX;
+	float range = max - min;
+	return (random * range) + min;
+}
+Vector Map::RandomPosition() {
+	float angle = RandomFloat(0, 360);
+	float length = RandomFloat(0, ref->radius);
+	return Vector(sin(angle) * length, cos(angle) * length);
+}

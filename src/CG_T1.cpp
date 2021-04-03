@@ -4,26 +4,20 @@
 #include "Map.h"
 #include "Entity.h"
 #include "Player.h"
-#define ORIGIN 125 //500 / 4
+#include "Pickup.h"
 #define MAP Map::ref
-
 
 #include <iostream>
 using namespace std;
 
-// Step size in x and y directions (number of pixels to move each time)
-GLfloat xstep = 1.0f;
-GLfloat ystep = 1.0f;
+
 // Timer
 GLfloat count_timer = 0;
 // Keep track of windows changing width and height
 GLfloat windowWidth;
 GLfloat windowHeight;
 
-
 Player *player;
-
-
 
 
 
@@ -41,27 +35,18 @@ void RenderScene(void) {
 			Entity::entities[i]->draw();
 		}
 	}
-
 	// Flush drawing commands
 	glutSwapBuffers();
 }
 
-// Called by GLUT library when idle (window not being
-// resized or moved)
-void TimerFunction(int value)
-{
-	// Reverse direction when you reach left or right edge
-	/*if (x1 > windowWidth - rsize || x1 < 0)
-		xstep = -xstep;
-	// Reverse direction when you reach top or bottom edge
-	if (y1 > windowHeight - rsize || y1 < 0)
-		ystep = -ystep;*/
+// Called by GLUT library when idle (window not being resized or moved)
+void TimerFunction(int value) {
+	// Colision
 	for (int i = 0; i < 50; i++) {
 		if (Entity::slots[i]) {
 			Entity::entities[i]->collision();
 		}
 	}
-
 
 	// Move Entities
 	for (int i = 0; i < 50; i++) {
@@ -79,36 +64,28 @@ void TimerFunction(int value)
 }
 
 
-
-
-
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 27: exit(0); break;
 	case '1': MAP->DecreaseMap(); break;
 	case '2': MAP->IncreaseMap(); break;
-	case 'w': player->dirY += 1.0f; break;
-	case 's': player->dirY += -1.0f; break;
-	case 'd': player->dirX += 1.0f; break;
-	case 'a': player->dirX += -1.0f; break;
+	case 'W': case 'w': player->velocity.y += 1.0f; break;
+	case 'S': case 's': player->velocity.y += -1.0f; break;
+	case 'D': case 'd': player->velocity.x += 1.0f; break;
+	case 'A': case 'a': player->velocity.x += -1.0f; break;
 	default: break;
 	}
 	glutPostRedisplay();
 }
 
 
-
-
-
 // Setup the rendering state
-void SetupRC(void)
-{
+void SetupRC(void) {
 	// Set clear color to blue
 	glClearColor(0.0f, 0.8f, 0.8f, 1.0f);
 }
 // Called by GLUT library when the window has changed size
-void ChangeSize(GLsizei w, GLsizei h)
-{
+void ChangeSize(GLsizei w, GLsizei h) {
 	// Prevent a divide by zero
 	if (h == 0)
 		h = 1;
@@ -147,7 +124,11 @@ int main(int argc, char** argv) {
 
 	//Spawn entities
 	Map::ref = new Map();
-	player = new Player(ORIGIN, ORIGIN);
+	player = new Player(Vector::zero);
+
+	new Pickup(Map::RandomPosition()); new Pickup(Map::RandomPosition()); new Pickup(Map::RandomPosition());
+	new Pickup(Map::RandomPosition()); new Pickup(Map::RandomPosition()); new Pickup(Map::RandomPosition());
+	new Pickup(Map::RandomPosition()); new Pickup(Map::RandomPosition()); new Pickup(Map::RandomPosition());
 
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);

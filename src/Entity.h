@@ -1,5 +1,8 @@
 #pragma once
 #include "Map.h"
+#include "Utils.h"
+#include <gl/glut.h>
+#include <math.h>
 
 #define ORIGIN 125 //500 / 4
 #define MAP Map::ref
@@ -12,26 +15,22 @@ public:
 	/// <summary>
 	/// 0-default
 	/// 1-player
-	/// 2-enemy
-	/// 3-pickup
+	/// 2-pickup
 	/// </summary>
 	int kind = 0;
 	int slot = 0;
-	float posX = 0;	float posY = 0;	//position
-	float dirX = 0; float dirY = 0; //moving vector
-	float speed = 1;
+	Vector position;
+	Vector velocity;
 	float box = 0;	//collision box radius
 
 	//METHODS
 	virtual void draw();
+	virtual void move();
 	virtual void die();
-	virtual void reactToEntity(Entity* entity);
-
-	void move();
 	void collision();
 protected:
-	float distanceTo(float x, float y);
-
+	virtual void reactToEntity(Entity* entity);
+	float distanceTo(Vector point);
 	static void spawn(Entity* entity);
 	static void despawn(int index);
 private:
