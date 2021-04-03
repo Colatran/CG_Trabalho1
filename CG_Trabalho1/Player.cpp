@@ -32,7 +32,6 @@ void Player::draw() {
 }
 
 void Player::die() {
-	cout << "Player die" << endl;
 	this->~Player();
 }
 

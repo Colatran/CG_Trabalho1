@@ -28,8 +28,7 @@ Player *player;
 
 
 // Called to draw scene
-void RenderScene(void)
-{
+void RenderScene(void) {
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT);
 
