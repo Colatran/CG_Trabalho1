@@ -30,6 +30,7 @@ void Player::draw() {
 void Player::move() {
 	position.x += velocity.x * speed;
 	position.y += velocity.y * speed;
+	velocity = Vector::zero;
 }
 
 void Player::die() {
@@ -38,11 +39,12 @@ void Player::die() {
 
 void Player::reactToEntity(Entity* entity) {
 	switch (entity->kind) {
-	case 2:
-		MAP->IncreaseMap();
-		entity->die();
+	case -2:
+		MAP->DecreaseMap();
 		break;
 	case 3:
+		MAP->IncreaseMap();
+		entity->die();
 		break;
 	default:
 		break;

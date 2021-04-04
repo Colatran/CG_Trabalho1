@@ -6,7 +6,7 @@ using namespace std;
 Pickup::Pickup(Vector location) {
 	spawn(this);
 	position = Vector(location.x + ORIGIN, location.y + ORIGIN);
-	kind = 2;
+	kind = 3;
 	box = 10;
 }
 Pickup::~Pickup() {

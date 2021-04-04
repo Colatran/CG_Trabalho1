@@ -13,9 +13,10 @@ public:
 	static bool slots[];
 
 	/// <summary>
-	/// 0-default
-	/// 1-player
-	/// 2-pickup
+	/// <para>0 default	</para>
+	/// <para>1 player __ -1 friendly hazard	</para>
+	/// <para>2 enemy  __ -2 hostile  hazard	</para>
+	/// <para>3 pickup	</para>
 	/// </summary>
 	int kind = 0;
 	int slot = 0;
