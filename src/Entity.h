@@ -20,7 +20,6 @@ public:
 	int kind = 0;
 	int slot = 0;
 	Vector position;
-	Vector velocity;
 	float box = 0;	//collision box radius
 
 	//METHODS

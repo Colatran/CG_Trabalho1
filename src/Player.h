@@ -2,6 +2,8 @@
 #include "Entity.h"
 
 class Player : public Entity {
+public:
+	Vector velocity;
 private:
 	const float speed = 2;
 

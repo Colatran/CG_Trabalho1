@@ -15,5 +15,6 @@ struct Vector {
 	}
 
 	static Vector zero;
+	static Vector one;
 	static Vector origin;
 };

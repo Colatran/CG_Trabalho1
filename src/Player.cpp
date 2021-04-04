@@ -15,6 +15,7 @@ Player::~Player() {
 void Player::draw() {
 	/// <summary>
 	/// TEMPORARIO
+	/// Depois temos de fazer os desenhos dos personagens
 	/// </summary>
 	glColor3f(0.1f, 0.1f, 0.8f);
 	glBegin(GL_TRIANGLE_FAN);
