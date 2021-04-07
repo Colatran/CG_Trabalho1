@@ -14,6 +14,16 @@ void draw_circle(struct Vector position, GLfloat r, GLfloat g, GLfloat b) {
 	glEnd();
 }
 
+void draw_square(struct Vector position, GLfloat r, GLfloat g, GLfloat b) {
+	glColor3f(r, g, b);
+	glBegin(GL_POLYGON);
+	glVertex2f(position.x - 5, position.y - 5);
+	glVertex2f(position.x + 5, position.y - 5);
+	glVertex2f(position.x + 5, position.y + 5);
+	glVertex2f(position.x - 5, position.y + 5);
+	glEnd();
+}
+
 /// <summary>
 /// TEMPORARIO /// TEMPORARIO /// TEMPORARIO /// TEMPORARIO
 /// Depois temos de fazer os desenhos dos personagens
