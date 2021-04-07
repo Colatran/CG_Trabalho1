@@ -1,9 +1,6 @@
 #include <windows.h>
 #include <gl/glut.h>
-#include <math.h>
-#include "Entity.h"
-#include "Draw.h"
-#include <stdio.h>
+#include "Draw.h"//
 
 // Timer
 GLfloat count_timer = 0;
@@ -14,6 +11,7 @@ GLfloat windowHeight;
 //Map
 float map_radius = 70.0f;
 
+//Entities
 struct Entity entities[50];
 int slots[50] = { 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0 };
 struct Entity player;
@@ -35,9 +33,6 @@ struct Vector RandomPosition() {
 	vector.x = sin(angle) * length + ORIGIN;
 	vector.y = cos(angle) * length + ORIGIN;
 	return vector;
-}
-float Length(struct Vector pointA, struct Vector pointB) {
-	return sqrt(((pointA.x - pointB.x) * (pointA.x - pointB.x)) + ((pointA.y - pointB.y) * (pointA.y - pointB.y)));
 }
 
 //Map Related
@@ -73,12 +68,13 @@ void Spawn(struct Entity entity) {
 	entities[slot] = entity;
 	entities[slot].slot = slot;
 }
-void Despawn(int index) {
+void Despawn(int index,  int by) {
 	slots[index] = 0;
 }
 
 // Called to draw scene
 void RenderScene(void) {
+	glutInitWindowPosition(-125, 125);
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -103,42 +99,71 @@ void TimerFunction(int value) {
 			struct Entity* entity1 = &entities[i1];
 
 			//Check if is outside the map
-			if (Length(entity1->position, vector_origin) > map_radius) {
-				Despawn(entity1->slot);
+			if (Distance(&entity1->position, &vector_origin) > map_radius) {
+				Despawn(entity1->slot, 0);
 				continue;
 			}
 
 			switch (entity1->kind) {
-			case 1:
-				continue;
-				break;
-			case 0: {
+			case 0: //Player
+			{
 				//Movement
-				entity1->position.x += entity1->velocity.x * PLAYER_SPEED;
-				entity1->position.y += entity1->velocity.y * PLAYER_SPEED;
-				entity1->velocity.x = 0;
-				entity1->velocity.y = 0;
+				float finalSpeed = entity1->speed * entity1->penaltySpeed * PLAYER_MAXSPEED;
+				entity1->position.x += entity1->direction.x * finalSpeed;
+				entity1->position.y += entity1->direction.y * finalSpeed;
+				entity1->speed = 0;
 
 				//Collision
 				for (int i2 = 1; i2 < 50; i2++) { // i2 = 1 porque 0 é o player
 					if (slots[i2]) {
 						struct Entity* entity2 = &entities[i2];
 
-						if (Length(entity1->position, entity2->position) < entity1->box) {
+						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
 							switch (entity2->surface) {
 							case -2:			//Hit
 								Map_Decrease();
+								entity1->penaltySpeed = 0;
 								break;
 							case 3:				//PickUp
 								Map_Increase();
-								Despawn(entity2->slot);
+								Despawn(entity2->slot, 1);
 								break;
 							}
 						}
 					}
 				}
 			} break;
-			
+			case 1: break;
+			case 2: //Block
+			{
+				for (int i2 = 0; i2 < 50; i2++) {
+					if (i1 == i2) continue;
+					if (slots[i2]) {
+						struct Entity* entity2 = &entities[i2];
+						struct Vector vector;
+						float distance;
+						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
+							float directionX, directionY;
+							switch (entity2->surface) {
+							case -1:
+							case 0: 
+								break;
+							case -2:
+							case 1:
+							case 2:
+							case 3:
+								vector = SetVectorLength(
+									entity2->position.x - entity1->position.x,
+									entity2->position.y - entity1->position.y,
+									entity1->radius + entity2->radius);
+								entity2->position.x = entity1->position.x + vector.x;
+								entity2->position.y = entity1->position.y + vector.y;
+								break;
+							}
+						}
+					}
+				}
+			}break;
 			}
 		}
 	}
@@ -157,10 +182,10 @@ void keyboard(unsigned char key, int x, int y) {
 	case 27: exit(0); break;
 	case '1': Map_Decrease(); break;
 	case '2': Map_Increase(); break;
-	case 'W': case 'w': entities[0].velocity.y += 1.0f; break;
-	case 'S': case 's': entities[0].velocity.y += -1.0f; break;
-	case 'D': case 'd': entities[0].velocity.x += 1.0f; break;
-	case 'A': case 'a': entities[0].velocity.x += -1.0f; break;
+	case 'W': case 'w': entities[0].direction.x = 0;	entities[0].direction.y = 1.0f;	entities[0].speed += 1; break;
+	case 'S': case 's': entities[0].direction.x = 0;	entities[0].direction.y = -1.0f;entities[0].speed += 1; break;
+	case 'D': case 'd': entities[0].direction.x = 1.0f;	entities[0].direction.y = 0;	entities[0].speed += 1; break;
+	case 'A': case 'a': entities[0].direction.x = -1.0f;entities[0].direction.y = 0;	entities[0].speed += 1; break;
 	default: break;
 	}
 	glutPostRedisplay();
@@ -211,19 +236,20 @@ int main(int argc, char** argv) {
 	glutCreateWindow("EchoLands");
 
 	//Spawn entities
-	Spawn(Player());
+	/*Spawn(Player());
 
-	Spawn(PickUp(RandomPosition()));
-	Spawn(PickUp(RandomPosition()));
-	Spawn(PickUp(RandomPosition()));
-	Spawn(PickUp(RandomPosition()));
-	Spawn(PickUp(RandomPosition()));
+	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
+	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
+	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
+	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
+	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));*/
 
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(keyboard);
 	glutTimerFunc(30, TimerFunction, 1);
-
+	
 	SetupRC();
 	glutMainLoop();
 }

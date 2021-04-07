@@ -1,6 +1,5 @@
 #pragma once
 #include <gl/glut.h>
-#include <math.h>
 #include "Entity.h"
 
 void draw_circle(struct Vector position, GLfloat r, GLfloat g, GLfloat b) {
@@ -13,7 +12,6 @@ void draw_circle(struct Vector position, GLfloat r, GLfloat g, GLfloat b) {
 	}
 	glEnd();
 }
-
 void draw_square(struct Vector position, GLfloat r, GLfloat g, GLfloat b) {
 	glColor3f(r, g, b);
 	glBegin(GL_POLYGON);
@@ -37,6 +35,9 @@ void draw_pickup(struct Vector position) {
 	draw_circle(position, 0.8f, 0.3f, 0.3f);
 }
 
+void draw_block(struct Vector position) {
+	draw_circle(position, 0.2f, 0.1f, 0.1f);
+}
 
 void Draw(struct Entity *entity) {
 	switch (entity->kind) {
@@ -46,5 +47,8 @@ void Draw(struct Entity *entity) {
 	case 1: //PickUp
 		draw_pickup(entity->position);
 		break;
+	case 2: //Block
+		draw_block(entity->position);
+		break;//
 	}
 }
