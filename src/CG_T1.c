@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <gl/glut.h>
-#include "Draw.h"//
+#include "Draw.h"
+#include <stdio.h>
 
 // Timer
 GLfloat count_timer = 0;
@@ -10,6 +11,7 @@ GLfloat windowHeight;
 
 //Map
 float map_radius = 70.0f;
+struct Vector vector_origin;
 
 //Entities
 struct Entity entities[50];
@@ -37,14 +39,39 @@ struct Vector RandomPosition() {
 
 //Map Related
 void Map_Draw() {
-	glColor3f(0.8f, 0.8f, 0.1f);
 	glBegin(GL_TRIANGLE_FAN);
+	glColor3f(0.01f, 0.5f, 0.1f);
+	glVertex2f(ORIGIN - map_radius, ORIGIN);
+	glColor3f(0.01f, 0.2f, 0.1f);
+	glVertex2f(ORIGIN + map_radius, ORIGIN);
+	for (float angle = 1.6; angle < 4.7; angle += 0.1) {
+		float x = ORIGIN + sin(angle) * map_radius;
+		float y = 70 + cos(angle) * map_radius;
+		float gradient = angle/4.7;
+
+		glColor3f(0.01f, 0.2f + 0.3 * angle / 4.7, 0.1f);
+		glVertex2f(x, y);
+	}
+	glEnd();
+	
+	glBegin(GL_TRIANGLE_FAN);
+	glColor3f(0.01f, 0.3f, 0.1f);
 	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
 		float x = ORIGIN + sin(angle) * map_radius;
 		float y = ORIGIN + cos(angle) * map_radius;
 		glVertex2f(x, y);
 	}
 	glEnd();
+
+	glBegin(GL_TRIANGLE_FAN);
+	glColor3f(0.8f, 0.8f, 0.1f);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = ORIGIN + sin(angle) * (map_radius - 2);
+		float y = ORIGIN + cos(angle) * (map_radius - 2);
+		glVertex2f(x, y);
+	}
+	glEnd();
+	
 }
 void Map_Decrease() { 
 	if (map_radius > 0) map_radius -= 5.0f;
@@ -74,7 +101,6 @@ void Despawn(int index,  int by) {
 
 // Called to draw scene
 void RenderScene(void) {
-	glutInitWindowPosition(-125, 125);
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -93,7 +119,7 @@ void RenderScene(void) {
 // Called by GLUT library when idle (window not being resized or moved)
 void TimerFunction(int value) {
 	//Collision & Movement
-	struct Vector vector_origin; vector_origin.x = ORIGIN; vector_origin.y = ORIGIN;
+	
 	for (int i1 = 0; i1 < 50; i1++) {
 		if (slots[i1]) {
 			struct Entity* entity1 = &entities[i1];
@@ -119,7 +145,19 @@ void TimerFunction(int value) {
 						struct Entity* entity2 = &entities[i2];
 
 						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
+							struct Vector vector;
 							switch (entity2->surface) {
+							case -1:
+							case 2:
+								break;
+							case 0:
+								vector = SetVectorLength(
+									entity1->position.x - entity2->position.x,
+									entity1->position.y - entity2->position.y,
+									entity2->radius + entity1->radius);
+								entity1->position.x = entity2->position.x + vector.x;
+								entity1->position.y = entity2->position.y + vector.y;
+								break;
 							case -2:			//Hit
 								Map_Decrease();
 								entity1->penaltySpeed = 0;
@@ -133,37 +171,9 @@ void TimerFunction(int value) {
 					}
 				}
 			} break;
-			case 1: break;
-			case 2: //Block
-			{
-				for (int i2 = 0; i2 < 50; i2++) {
-					if (i1 == i2) continue;
-					if (slots[i2]) {
-						struct Entity* entity2 = &entities[i2];
-						struct Vector vector;
-						float distance;
-						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
-							float directionX, directionY;
-							switch (entity2->surface) {
-							case -1:
-							case 0: 
-								break;
-							case -2:
-							case 1:
-							case 2:
-							case 3:
-								vector = SetVectorLength(
-									entity2->position.x - entity1->position.x,
-									entity2->position.y - entity1->position.y,
-									entity1->radius + entity2->radius);
-								entity2->position.x = entity1->position.x + vector.x;
-								entity2->position.y = entity1->position.y + vector.y;
-								break;
-							}
-						}
-					}
-				}
-			}break;
+			case 1:
+			case 2:
+			break;
 			}
 		}
 	}
@@ -233,18 +243,26 @@ int main(int argc, char** argv) {
 	glutInit(&argc, argv);      // Initialize GLUT
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(600, 600);
+	glutInitWindowPosition(125, 125);
 	glutCreateWindow("EchoLands");
 
+	vector_origin.x = ORIGIN; 
+	vector_origin.y = ORIGIN;
+
 	//Spawn entities
-	/*Spawn(Player());
-
-	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
-	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
-	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
-	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
-	Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition())); Spawn(Block(RandomPosition()));
-	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));*/
-
+	Spawn(Player());
+	
+	Spawn(Block(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));
+	Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition())); Spawn(PickUp(RandomPosition()));
+	
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(keyboard);
