@@ -125,7 +125,7 @@ void TimerFunction(int value) {
 			struct Entity* entity1 = &entities[i1];
 
 			//Check if is outside the map
-			if (Distance(&entity1->position, &vector_origin) > map_radius) {
+			if (Distance(&entity1->position, &vector_origin) + entity1->radius  > map_radius) {
 				Despawn(entity1->slot, 0);
 				continue;
 			}
@@ -140,7 +140,7 @@ void TimerFunction(int value) {
 				entity1->speed = 0;
 
 				//Collision
-				for (int i2 = 1; i2 < 50; i2++) { // i2 = 1 porque 0 é o player
+				for (int i2 = 1; i2 < 50; i2++) { // i2 = 1 porque 0 Ã© o player
 					if (slots[i2]) {
 						struct Entity* entity2 = &entities[i2];
 
