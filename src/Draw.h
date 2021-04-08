@@ -2,28 +2,29 @@
 #include <gl/glut.h>
 #include "Entity.h"
 
-void draw_circle(struct Vector position, GLfloat r, GLfloat g, GLfloat b) {
+void draw_circle(GLfloat r, GLfloat g, GLfloat b, float radius) {
 	glColor3f(r, g, b);
 	glBegin(GL_TRIANGLE_FAN);
 	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
-		float x = position.x + sin(angle) * 5;
-		float y = position.y + cos(angle) * 5;
+		float x = sin(angle) * radius;
+		float y = cos(angle) * radius;
 		glVertex2f(x, y);
 	}
 	glEnd();
 }
-void draw_square(struct Vector position, GLfloat r, GLfloat g, GLfloat b) {
-	glColor3f(r, g, b);
-	glBegin(GL_POLYGON);
-	glVertex2f(position.x - 5, position.y - 5);
-	glVertex2f(position.x + 5, position.y - 5);
-	glVertex2f(position.x + 5, position.y + 5);
-	glVertex2f(position.x - 5, position.y + 5);
-	glEnd();
-}
 
-void draw_player(struct Vector position) {
-	
+
+
+void draw_player() {
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 15;
+		float y = cos(angle) * 15;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
 	//CABEÇA
 	glColor3f(1, 0.7, 0.4);
 	glBegin(GL_POLYGON);
@@ -272,27 +273,109 @@ void draw_player(struct Vector position) {
 	glVertex2f(5, 0);
 	glVertex2f(20, 0);
 	glEnd();
-
 }
 
-void draw_pickup(struct Vector position) {
-	draw_circle(position, 0.8f, 0.3f, 0.3f);
+void draw_thrower() {
+	draw_circle(0.0f, 0.0f, 0.0f, 5);
 }
 
-void draw_block(struct Vector position) {
-	draw_circle(position, 0.2f, 0.1f, 0.1f);
+void draw_throwerProjectile() {
+	draw_circle(0.0f, 0.0f, 0.0f, 5);
 }
+
+void draw_blobSmall() {
+	draw_circle(0.0f, 0.0f, 0.0f, 5);
+}
+
+void draw_blobBig() {
+	draw_circle(0.0f, 0.0f, 0.0f, 5);
+}
+
+void draw_pickup() {
+	draw_circle(0.8f, 0.3f, 0.3f, 5);
+}
+
+void draw_jar() {
+	draw_circle(0.2f, 0.1f, 0.1f, 5);
+}
+
+void draw_block() {
+	draw_circle(0.0f, 0.0f, 0.0f, 5);
+}
+
+void draw_playerSword(struct Vector vector) {
+	glColor3f(1.0, 1.0, 1.0);
+	glRectf(-1, 0, 1, -20);
+	glEnd();
+}
+
+
 
 void Draw(struct Entity* entity) {
+	float angle;
+
 	switch (entity->kind) {
+
 	case 0: //Palyer
-		draw_player(entity->position);
+		glScalef(.3333f, .3333f, 1.0f);
+		glTranslatef(entity->position.x * 3, entity->position.y * 3 -25, 0);
+		draw_player();
 		break;
+
+	case 1: //Enemy Thrower
+		glScalef(1.0f, 1.0f, 1.0f);
+		glTranslatef(entity->position.x, entity->position.y, 0);
+		draw_thrower();
+		break;
+
+	case 2: //Enemy Thrower Projectile
+		glScalef(1.0f, 1.0f, 1.0f);
+		glTranslatef(entity->position.x, entity->position.y, 0);
+		draw_throwerProjectile();
+		break;
+
+	case 3: //Enemy Blob Small
+		glScalef(1.0f, 1.0f, 1.0f);
+		glTranslatef(entity->position.x, entity->position.y, 0);
+		draw_blobSmall();
+		break;
+
+	case 4: //Enemy Blob Big
+		glScalef(1.0f, 1.0f, 1.0f);
+		glTranslatef(entity->position.x, entity->position.y, 0);
+		draw_blobBig();
+		break;
+
 	case 5: //PickUp
-		draw_pickup(entity->position);
+		glScalef(1.0f, 1.0f, 1.0f);
+		glTranslatef(entity->position.x, entity->position.y, 0);
+		draw_pickup();
 		break;
+
+	case 6: //Jar
+		glScalef(1.0f, 1.0f, 1.0f);
+		glTranslatef(entity->position.x, entity->position.y, 0);
+		draw_jar();
+		break;
+
 	case 7: //Block
-		draw_block(entity->position);
-		break;//
+		glScalef(1.0f, 1.0f, 1.0f);
+		glTranslatef(entity->position.x, entity->position.y, 0);
+		draw_block();
+		break;
+
+	case 8: //Palyer Sword
+		if (entity->direction.x == 0) angle = asin(entity->direction.y);
+		else angle = acos(entity->direction.x);
+		angle = angle * 180 / 3.141593 + 67.5 + 45 * entity->frame / 3;
+
+		glScalef(1.0f, 1.0f, 1.0f);
+		glTranslatef(entity->position.x - entity->direction.x * 10, entity->position.y - entity->direction.y * 10, 0);
+		glRotatef(angle, 0, 0, 1);
+		draw_playerSword(entity->direction);
+		break;
 	}
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }

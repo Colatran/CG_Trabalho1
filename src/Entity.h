@@ -3,6 +3,7 @@
 #define ORIGIN 125 //500 / 4
 #define PLAYER_MAXSPEED 3
 
+#include <stdio.h>
 
 struct Vector {
 	float x;
@@ -32,9 +33,11 @@ struct Entity {
 	/// <para>5 pickup						</para>
 	/// <para>6 jar							</para>
 	/// <para>7 block						</para>
+	/// <para>8 playerSword					</para>
 	/// </summary>
 	int kind;
 
+	int frame;
 	int slot;
 };
 
@@ -52,7 +55,7 @@ struct Vector SetVectorLength(float x, float y, float length) {
 	struct Vector vector;
 	vector.x = (x / magnitude) * length/2;
 	vector.y = (y / magnitude) * length/2;
-	return vector;//
+	return vector;
 }
 
 
@@ -70,20 +73,39 @@ struct Entity Player() {
 	entity.kind = 0;
 	return entity;
 }
+struct Entity PlayerSword(struct Entity player) {
+	struct Entity entity;
+	entity.position.x = player.position.x + player.direction.x * player.radius;
+	entity.position.y = player.position.y + player.direction.y * player.radius;
+	entity.direction = player.direction;
+
+	entity.surface = -1;
+	entity.radius = 15;
+	entity.kind = 8;
+	entity.frame = 0;
+	return entity;
+}
 struct Entity PickUp(struct Vector position) {
 	struct Entity entity;
-	entity.position.x = position.x;
-	entity.position.y = position.y;
+	entity.position = position;
 
 	entity.surface = 3;
 	entity.radius = 10;
 	entity.kind = 5;
 	return entity;
 }
+struct Entity Jar(struct Vector position) {
+	struct Entity entity;
+	entity.position = position;
+
+	entity.surface = 0;
+	entity.radius = 10;
+	entity.kind = 6;
+	return entity;
+}
 struct Entity Block(struct Vector position) {
 	struct Entity entity;
-	entity.position.x = position.x;
-	entity.position.y = position.y;
+	entity.position = position;
 
 	entity.surface = 0;
 	entity.radius = 10;
