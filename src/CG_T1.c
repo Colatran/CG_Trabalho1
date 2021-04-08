@@ -17,7 +17,9 @@ struct Vector vector_origin;
 struct Entity entities[MAX_ENTITIES];
 int slots[MAX_ENTITIES];
 struct Entity* player;
-
+float player_penaltySpeed = 1;
+int player_frame_attack = 0;
+int player_frame_imunity = 0;
 
 
 
@@ -135,11 +137,13 @@ void TimerFunction(int value) {
 			switch (entity1->kind) {
 			case 0: {
 				//Movement
-				float finalSpeed = entity1->speed * entity1->penaltySpeed * PLAYER_MAXSPEED;
+				float finalSpeed = entity1->speed * player_penaltySpeed * PLAYER_MAXSPEED;
 				entity1->position.x += entity1->direction.x * finalSpeed;
 				entity1->position.y += entity1->direction.y * finalSpeed;
-				entity1->speed = 0;
-				
+				if (player_frame_imunity > 0) player_frame_imunity--;
+				if (player_frame_attack > 0) player_frame_attack--; 
+				else entity1->speed = 0;
+
 				//Collision
 				for (int i2 = 1; i2 < MAX_ENTITIES; i2++) { // i2 = 1 porque 0 é o player
 					if (slots[i2]) {
@@ -157,8 +161,11 @@ void TimerFunction(int value) {
 								entity1->position.y = entity2->position.y + vector.y;
 								break;
 							case -2:			//Hit
-								Map_Decrease();
-								entity1->penaltySpeed = 0;
+								if (player_frame_imunity == 0) {
+									Map_Decrease();
+									player_penaltySpeed = 0;
+									player_frame_imunity = 30;
+								}
 								break;
 							case 3:				//PickUp
 								Map_Increase();
@@ -193,7 +200,6 @@ void TimerFunction(int value) {
 								if (entity2->kind == 6) {
 									Spawn(PickUp(entity2->position));
 									Despawn(entity2->slot);
-									//printf("Contact\n");
 								}
 								break;
 							}
@@ -224,13 +230,11 @@ void keyboard(unsigned char key, int x, int y) {
 	case 27: exit(0); break;
 	case '1': Map_Decrease(); break;
 	case '2': Map_Increase(); break;
-	case 'W': case 'w': player->direction.x = 0;	player->direction.y = 1.0f;	player->speed += 1; break;
-	case 'S': case 's': player->direction.x = 0;	player->direction.y = -1.0f;player->speed += 1; break;
-	case 'D': case 'd': player->direction.x = 1.0f;	player->direction.y = 0;	player->speed += 1; break;
-	case 'A': case 'a': player->direction.x = -1.0f;player->direction.y = 0;	player->speed += 1; break;
-	case 'C': case 'c': {
-		Spawn(PlayerSword(*player));
-	} break;
+	case 'W': case 'w': if (player_frame_attack == 0) { player->direction.x = 0;	player->direction.y = 1.0f;	player->speed += 1; } break;
+	case 'S': case 's': if (player_frame_attack == 0) { player->direction.x = 0;	player->direction.y = -1.0f;player->speed += 1; } break;
+	case 'D': case 'd': if (player_frame_attack == 0) { player->direction.x = 1.0f;	player->direction.y = 0;	player->speed += 1; } break;
+	case 'A': case 'a': if (player_frame_attack == 0) { player->direction.x = -1.0f;player->direction.y = 0;	player->speed += 1; } break;
+	case 'C': case 'c': if (player_frame_attack == 0) { Spawn(PlayerSword(*player));player_frame_attack = 3;	player->speed += 2;	} break;
 	default: break;
 	}
 	glutPostRedisplay();

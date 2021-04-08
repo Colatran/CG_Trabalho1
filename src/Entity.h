@@ -13,7 +13,6 @@ struct Entity {
 	struct Vector position;
 	struct Vector direction;
 	float speed;
-	float penaltySpeed;
 
 	/// <summary>
 	/// <para>Isto controla o que acontece a duas entidades colidem uma com a outra</para>
@@ -42,7 +41,6 @@ struct Entity {
 };
 
 
-
 //Utils
 float Distance(struct Vector* pointA, struct Vector* pointB) {
 	return sqrt(
@@ -57,6 +55,10 @@ struct Vector SetVectorLength(float x, float y, float length) {
 	vector.y = (y / magnitude) * length/2;
 	return vector;
 }
+int IsInsideMyBoundries_Circle(struct Entity* me, struct Entity* him) {
+	if (Distance(&me->position, &him->position) < me->radius) return 1;
+	else return 0;
+}
 
 
 struct Entity Player() {
@@ -66,7 +68,6 @@ struct Entity Player() {
 	entity.direction.x = 0;
 	entity.direction.y = -1;
 	entity.speed = 0;
-	entity.penaltySpeed = 1;
 
 	entity.surface = 1;
 	entity.radius = 10;
@@ -111,9 +112,4 @@ struct Entity Block(struct Vector position) {
 	entity.radius = 10;
 	entity.kind = 7;
 	return entity;
-}
-
-int IsInsideMyBoundries_Circle(struct Entity *me, struct Entity *him) {
-	if (Distance(&me->position, &him->position) < me->radius) return 1;
-	else return 0;
 }
