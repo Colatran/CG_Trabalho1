@@ -18,7 +18,7 @@ struct Vector vector_origin;
 struct Entity entities[MAX_ENTITIES];
 int slots[MAX_ENTITIES];
 float player_penaltySpeed = 1;
-//int player_frame_attack = 0; // Nao consegui usar o da estrotura
+
 
 
 
@@ -68,8 +68,8 @@ void Map_Draw() {
 	glBegin(GL_TRIANGLE_FAN);
 	glColor3f(0.8f, 0.8f, 0.1f);
 	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
-		float x = ORIGIN + sin(angle) * (map_radius - 2);
-		float y = ORIGIN + cos(angle) * (map_radius - 2);
+		float x = ORIGIN + sin(angle) * (map_radius - 2.0);
+		float y = ORIGIN + cos(angle) * (map_radius - 2.0);
 		glVertex2f(x, y);
 	}
 	glEnd();
@@ -167,31 +167,23 @@ void TimerFunction(int value) {
 
 				//Colisao
 				for (int i2 = 1; i2 < MAX_ENTITIES; i2++) { // i2 = 1 porque 0 é o player
-					if (slots[i2]) {
+					if (slots[i2] && i1 != i2) {
 						struct Entity* entity2 = &entities[i2];
 
 						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
 							struct Vector vector;
 							switch (entity2->surface) {
-							case 0:
-								vector = SetVectorLength(
+							case 0: {
+								struct Vector vector = SetVectorLength(
 									entity1->position.x - entity2->position.x,
 									entity1->position.y - entity2->position.y,
 									entity2->radius + entity1->radius);
 								entity1->position.x = entity2->position.x + vector.x;
 								entity1->position.y = entity2->position.y + vector.y;
-								break;
-							case -2:			//Hit
-								/*if (entity1->frame_imunity == 0) {
-									Map_Decrease();
-									player_penaltySpeed = 0;
-									entity1->frame_imunity = 30;
-								}*/
-								break;
-							case 3:				//PickUp
-								Map_Increase();
-								Despawn(entity2->slot);
-								break;
+							} break;
+							case 3:
+								if (entity2->frame_imunity == 0)entity2->health = 0;
+								break; //PickUp
 							}
 						}
 					}
@@ -203,7 +195,7 @@ void TimerFunction(int value) {
 				if (entity1->frame_imunity > 0) entity1->frame_imunity--;
 
 				//Rotina AI
-				//entity1->frame[0] //faze da rotina
+				//entity1->frame[0] //fase da rotina
 				//entity1->frame[1] //tempo da faze da rotina
 				switch (entity1->frame[0]) {
 				case 0: {
@@ -254,7 +246,7 @@ void TimerFunction(int value) {
 
 				//Colisao
 				for (int i2 = 1; i2 < MAX_ENTITIES; i2++) { // i2 = 1 porque 0 é o player
-					if (slots[i2]) {
+					if (slots[i2] && i1 != i2) {
 						struct Entity* entity2 = &entities[i2];
 
 						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
@@ -272,7 +264,7 @@ void TimerFunction(int value) {
 									Spawn(Particle(entity1->position, 0, 2));
 									entity1->health--;
 									if (entity1->health <= 0) Despawn(entity1->slot);
-									else entity1->frame_imunity = 10;
+									else entity1->frame_imunity = 5;
 								}
 							} break;
 							}
@@ -288,7 +280,7 @@ void TimerFunction(int value) {
 
 				//Colisao
 				for (int i2 = 0; i2 < MAX_ENTITIES; i2++) {
-					if (slots[i2]) {
+					if (slots[i2] && i1 != i2) {
 						struct Entity* entity2 = &entities[i2];
 
 						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
@@ -305,12 +297,183 @@ void TimerFunction(int value) {
 				}
 			} break; //Enemy thrower rock
 				
+			case 3: {
+				//Rotina AI
+				//entity1->frame[0] //fase da rotina
+				//entity1->frame[1] //tempo da faze da rotina
+				//entity1->frame[2] //se causa ou nao dano
+				//entity1->frame_imunity //else salta 3 vezes segidas so depois espera 1 s
+				switch (entity1->frame[0]) {
+				case 0: {
+					//Encontra a direcao para o jogador
+					entity1->direction = SetVectorLength(entities[0].position.x - entity1->position.x, entities[0].position.y - entity1->position.y, 1.0);
+					entity1->speed = 7.5f;
+					entity1->frame[0]++;
+					entity1->frame[2] = 1;
+				} break;
+				case 1: {
+					//Atira-se para la
+					entity1->position.x += entity1->direction.x * entity1->speed;
+					entity1->position.y += entity1->direction.y * entity1->speed;
+					//Durante 5 frames
+					entity1->frame[1]--;
+					if(entity1->frame[1] == 0){
+						//Passa para a proxima faze da rotina
+						entity1->frame[0]++;
+
+						//Adiciona um salto ou reseta
+						entity1->frame_imunity++;
+						if (entity1->frame_imunity == 3) entity1->frame_imunity = 0;
+
+						//Se ja for o 3o salto espera 60 frames, se nao apenas 10
+						if(entity1->frame_imunity == 0) entity1->frame[1] = 60;
+						else entity1->frame[1] = 10;
+
+						//so ataca o player se estiver no salto
+						entity1->frame[2] = 0;
+						entity1->speed = 0.0f;
+					}
+				} break;
+				case 2: {
+					//Atraso entre salto
+					entity1->frame[1]--;
+					if (entity1->frame[1] == 0) {
+						entity1->frame[0] = 0;
+						entity1->frame[1] = 5;
+					}
+				} break;
+				}
+
+				//Colisao
+				for (int i2 = 0; i2 < MAX_ENTITIES; i2++) { // i2 = 1 porque 0 é o player
+					if (slots[i2] && i1 != i2) {
+						struct Entity* entity2 = &entities[i2];
+
+						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
+							switch (entity2->surface) {
+							case 0: {
+								struct Vector vector = SetVectorLength(
+									entity1->position.x - entity2->position.x,
+									entity1->position.y - entity2->position.y,
+									entity2->radius + entity1->radius);
+								entity1->position.x = entity2->position.x + vector.x;
+								entity1->position.y = entity2->position.y + vector.y;
+							} break;
+							case -1: {//Hit
+								if (entity1->frame_imunity == 0) {
+									Spawn(Particle(entity1->position, 0, 2));
+									entity1->health--;
+									if (entity1->health <= 0) Despawn(entity1->slot);
+									else entity1->frame_imunity = 5;
+								}
+							} break;
+							case 1:
+								if (entity1->frame[2] == 1) {
+									entity2->health = 0;
+								}
+								break;
+							}
+						}
+					}
+				}
+
+			} break; //Enemy blob small
+
+			case 4: {
+				//Reduzir tempo de imunidade
+				if (entity1->frame_imunity > 0) entity1->frame_imunity--;
+
+				//Rotina AI
+				//entity1->frame[0] //fase da rotina
+				//entity1->frame[1] //tempo da faze da rotina
+				//entity1->frame[2] //se causa ou nao dano
+				switch (entity1->frame[0]) {
+				case 0: {
+					//Encontra a direcao para o jogador
+					entity1->direction = SetVectorLength(entities[0].position.x - entity1->position.x, entities[0].position.y - entity1->position.y, 1.0);
+					entity1->speed = 10.0f;
+					entity1->frame[0]++;
+					entity1->frame[2] = 1;
+				} break;
+				case 1: {
+					//Atira-se para la
+					entity1->position.x += entity1->direction.x * entity1->speed;
+					entity1->position.y += entity1->direction.y * entity1->speed;
+					//Durante 5 frames
+					entity1->frame[1]--;
+					if (entity1->frame[1] == 0) {
+						//Passa para a proxima faze da rotina
+						entity1->frame[0]++;
+
+						//Espera 60 frames ate ao proximo salto
+						entity1->frame[1] = 60;
+
+						//so ataca o player se estiver no salto
+						entity1->frame[2] = 0;
+						entity1->speed = 0.0f;
+					}
+				} break;
+				case 2: {
+					//Atraso entre salto
+					entity1->frame[1]--;
+					if (entity1->frame[1] == 0) {
+						entity1->frame[0] = 0;
+						entity1->frame[1] = 10;
+					}
+				} break;
+				}
+
+				//Colisao
+				for (int i2 = 0; i2 < MAX_ENTITIES; i2++) { // i2 = 1 porque 0 é o player
+					if (slots[i2] && i1 != i2) {
+						struct Entity* entity2 = &entities[i2];
+
+						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
+							switch (entity2->surface) {
+							case 0: {
+								struct Vector vector = SetVectorLength(
+									entity1->position.x - entity2->position.x,
+									entity1->position.y - entity2->position.y,
+									entity2->radius + entity1->radius);
+								entity1->position.x = entity2->position.x + vector.x;
+								entity1->position.y = entity2->position.y + vector.y;
+							} break;
+							case -1: {//Hit
+								if (entity1->frame_imunity == 0) {
+									Spawn(Particle(entity1->position, 0, 2));
+									entity1->health--;
+									if (entity1->health <= 0) Despawn(entity1->slot);
+									else entity1->frame_imunity = 5;
+								}
+							} break;
+							case 1:
+								if (entity1->frame[2] == 1) {
+									entity2->health = 0;
+								}
+								break;
+							}
+						}
+					}
+				}
+
+			} break; //Enemy blob big
+
+			case 5: {
+				if (entity1->frame_imunity > 0) entity1->frame_imunity--;
+				else if(entity1->health == 0) {
+					Map_Increase();
+					Despawn(entity1->slot);
+				}
+			} break; //PickUp
+
 			case 6: {
 				if (entity1->health == 0) {
 					Spawn(PickUp(entity1->position));
 					Despawn(entity1->slot);
 				}
 			} break; //Jar
+
+			//case 7: {} break; //Block
 
 			case 8: {
 				//Tempo
@@ -322,6 +485,19 @@ void TimerFunction(int value) {
 				//Movimento
 				entity1->position.x = PLAYER.position.x + entity1->direction.x * PLAYER.radius;
 				entity1->position.y = PLAYER.position.y + entity1->direction.y * PLAYER.radius;
+
+				//Colisao
+				for (int i2 = 0; i2 < MAX_ENTITIES; i2++) {
+					if (slots[i2] && i1 != i2) {
+						struct Entity* entity2 = &entities[i2];
+
+						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
+							if (entity2->kind == 6) {
+								entity2->health = 0;
+							}
+						}
+					}
+				}
 			} break; //Player Sword
 
 			case 9: {
@@ -412,6 +588,8 @@ int main(int argc, char** argv) {
 	Spawn(Jar(RandomPosition())); 
 	Spawn(Block(RandomPosition()));
 	Spawn(Thrower(RandomPosition()));
+	Spawn(BlobSmall(RandomPosition()));
+	Spawn(BlobBig(RandomPosition()));
 
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);

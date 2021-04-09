@@ -39,7 +39,7 @@ struct Entity {
 	int kind;
 	int health;
 
-	int frame[2];
+	int frame[3];
 	int frame_imunity;
 	int slot;
 };
@@ -64,7 +64,7 @@ int IsInsideMyBoundries_Circle(struct Entity* me, struct Entity* him) {
 	else return 0;
 }
 
-
+//Enteties
 struct Entity Player() {
 	struct Entity entity;
 	entity.position.x = ORIGIN;
@@ -102,6 +102,8 @@ struct Entity PickUp(struct Vector position) {
 	entity.surface = 3;
 	entity.radius = 10;
 	entity.kind = 5;
+	entity.health = 1;
+	entity.frame_imunity = 10;
 	return entity;
 }
 struct Entity Jar(struct Vector position) {
@@ -165,6 +167,43 @@ struct Entity ThrowerRock(struct Vector position, struct Vector direction) {
 	entity.radius = 10;
 	entity.kind = 2;
 	entity.frame_imunity = 0;
+
+	return entity;
+}
+struct Entity BlobSmall(struct Vector position) {
+	struct Entity entity;
+	entity.position = position;
+	entity.direction.x = 0;
+	entity.direction.y = 0;
+	entity.speed = 0;
+
+	entity.surface = 2;
+	entity.radius = 10;
+	entity.kind = 3;
+
+	entity.frame_imunity = 0;
+	entity.frame[0] = 2;
+	entity.frame[1] = 60;
+	entity.frame[2] = 0;
+
+	return entity;
+}
+struct Entity BlobBig(struct Vector position) {
+	struct Entity entity;
+	entity.position = position;
+	entity.direction.x = 0;
+	entity.direction.y = 0;
+	entity.speed = 0;
+
+	entity.surface = 2;
+	entity.radius = 20;
+	entity.kind = 4;
+	entity.health = 2;
+
+	entity.frame_imunity = 0;
+	entity.frame[0] = 2;
+	entity.frame[1] = 60;
+	entity.frame[2] = 0;
 
 	return entity;
 }

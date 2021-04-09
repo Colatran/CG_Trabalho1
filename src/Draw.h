@@ -284,11 +284,11 @@ void draw_throwerProjectile() {
 }
 
 void draw_blobSmall() {
-	draw_circle(0.0f, 0.0f, 0.0f, 5);
+	draw_circle(0.1f, 0.8f, 0.1f, 5);
 }
 
 void draw_blobBig() {
-	draw_circle(0.0f, 0.0f, 0.0f, 5);
+	draw_circle(0.8f, 0.3f, 0.3f, 10);
 }
 
 void draw_pickup() {
