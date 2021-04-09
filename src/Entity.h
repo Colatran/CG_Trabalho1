@@ -12,6 +12,7 @@ struct Vector {
 struct Entity {
 	struct Vector position;
 	struct Vector direction;
+	struct Vector AIpoint;
 	float speed;
 
 	/// <summary>
@@ -33,10 +34,13 @@ struct Entity {
 	/// <para>6 jar							</para>
 	/// <para>7 block						</para>
 	/// <para>8 playerSword					</para>
+	/// <para>9 particle					</para>
 	/// </summary>
 	int kind;
+	int health;
 
-	int frame;
+	int frame[2];
+	int frame_imunity;
 	int slot;
 };
 
@@ -72,6 +76,10 @@ struct Entity Player() {
 	entity.surface = 1;
 	entity.radius = 10;
 	entity.kind = 0;
+	entity.health = 1;
+	entity.frame[0] = 0; 
+	entity.frame[1] = 0; 
+	entity.frame_imunity = 0;
 	return entity;
 }
 struct Entity PlayerSword(struct Entity player) {
@@ -83,9 +91,10 @@ struct Entity PlayerSword(struct Entity player) {
 	entity.surface = -1;
 	entity.radius = 15;
 	entity.kind = 8;
-	entity.frame = 0;
+	entity.frame[0] = 0;
 	return entity;
 }
+
 struct Entity PickUp(struct Vector position) {
 	struct Entity entity;
 	entity.position = position;
@@ -102,6 +111,8 @@ struct Entity Jar(struct Vector position) {
 	entity.surface = 0;
 	entity.radius = 10;
 	entity.kind = 6;
+	entity.health = 1;
+
 	return entity;
 }
 struct Entity Block(struct Vector position) {
@@ -111,5 +122,49 @@ struct Entity Block(struct Vector position) {
 	entity.surface = 0;
 	entity.radius = 10;
 	entity.kind = 7;
+	return entity;
+}
+struct Entity Particle(struct Vector position, int type, int time) {
+	struct Entity entity;
+	entity.position = position;
+
+	entity.radius = 0;
+	entity.kind = 9;
+	entity.frame_imunity = time;
+
+	//Isto vai defenir que particula parace no ecra
+	entity.health = type;
+	return entity;
+}
+
+struct Entity Thrower(struct Vector position) {
+	struct Entity entity;
+	entity.position = position;
+	entity.direction.x = 0;
+	entity.direction.y = 0;
+	entity.speed = 0;
+
+	entity.surface = 2;
+	entity.radius = 10;
+	entity.kind = 1;
+	entity.health = 3;
+
+	entity.frame_imunity = 0;
+	entity.frame[0] = 4;
+	entity.frame[1] = 0;
+
+	return entity;
+}
+struct Entity ThrowerRock(struct Vector position, struct Vector direction) {
+	struct Entity entity;
+	entity.position = position;
+	entity.direction = direction;
+	entity.speed = 5;
+
+	entity.surface = -2;
+	entity.radius = 10;
+	entity.kind = 2;
+	entity.frame_imunity = 0;
+
 	return entity;
 }

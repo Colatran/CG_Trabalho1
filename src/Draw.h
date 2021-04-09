@@ -19,8 +19,8 @@ void draw_player() {
 	glColor3f(0.0, 0.0, 0.0);
 	glBegin(GL_TRIANGLE_FAN);
 	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
-		float x = sin(angle) * 15;
-		float y = cos(angle) * 15;
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20;
 		glVertex2f(x, y);
 	}
 	glEnd();
@@ -276,11 +276,11 @@ void draw_player() {
 }
 
 void draw_thrower() {
-	draw_circle(0.0f, 0.0f, 0.0f, 5);
+	draw_circle(1.0f, 1.0f, 1.0f, 5);
 }
 
 void draw_throwerProjectile() {
-	draw_circle(0.0f, 0.0f, 0.0f, 5);
+	draw_circle(1.0f, 0.0f, 0.0f, 5);
 }
 
 void draw_blobSmall() {
@@ -303,22 +303,36 @@ void draw_block() {
 	draw_circle(0.0f, 0.0f, 0.0f, 5);
 }
 
-void draw_playerSword(struct Vector vector) {
+void draw_playerSword() {
 	glColor3f(1.0, 1.0, 1.0);
 	glRectf(-1, 0, 1, -20);
+	glEnd();
+}
+
+void draw_hitMarker() {
+	glColor3f(1.0, 0, 0);
+	glBegin(GL_POLYGON);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 5;
+		float y = cos(angle) * 5;
+		glVertex2f(x, y);
+	}
+	for (float angle = 2 * 3.14159f; angle > 0; angle -= 0.1) {
+		float x = sin(angle) * 4;
+		float y = cos(angle) * 4;
+		glVertex2f(x, y);
+	}
 	glEnd();
 }
 
 
 
 void Draw(struct Entity* entity) {
-	float angle;
-
 	switch (entity->kind) {
 
 	case 0: //Palyer
-		glScalef(.3333f, .3333f, 1.0f);
-		glTranslatef(entity->position.x * 3, entity->position.y * 3 -25, 0);
+		glScalef(.25f, .25f, 1.0f);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_player();
 		break;
 
@@ -364,15 +378,23 @@ void Draw(struct Entity* entity) {
 		draw_block();
 		break;
 
-	case 8: //Palyer Sword
+	case 8: {
+		float angle;
 		if (entity->direction.x == 0) angle = asin(entity->direction.y);
 		else angle = acos(entity->direction.x);
-		angle = angle * 180 / 3.141593 + 67.5 + 45 * entity->frame / 3;
+		angle = angle * 180.0 / 3.141593 + 67.5 + 45 * entity->frame[0] / 3;
 
 		glScalef(1.0f, 1.0f, 1.0f);
 		glTranslatef(entity->position.x - entity->direction.x * 10, entity->position.y - entity->direction.y * 10, 0);
 		glRotatef(angle, 0, 0, 1);
-		draw_playerSword(entity->direction);
+
+		draw_playerSword();
+	} break; //Palyer Sword
+
+	case 9: //HitMarker
+		glScalef(1.0f, 1.0f, 1.0f);
+		glTranslatef(entity->position.x, entity->position.y, 0);
+		draw_hitMarker();
 		break;
 	}
 

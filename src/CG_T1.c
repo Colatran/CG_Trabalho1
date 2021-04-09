@@ -1,7 +1,8 @@
 #include <windows.h>
 #include <gl/glut.h>
 #include "Draw.h"
-#define MAX_ENTITIES 200
+#define MAX_ENTITIES 100
+#define PLAYER entities[0]
 
 // Timer
 GLfloat count_timer = 0;
@@ -16,10 +17,8 @@ struct Vector vector_origin;
 //Entities
 struct Entity entities[MAX_ENTITIES];
 int slots[MAX_ENTITIES];
-struct Entity* player;
 float player_penaltySpeed = 1;
-int player_frame_attack = 0;
-int player_frame_imunity = 0;
+//int player_frame_attack = 0; // Nao consegui usar o da estrotura
 
 
 
@@ -38,6 +37,7 @@ struct Vector RandomPosition() {
 	vector.y = cos(angle) * length + ORIGIN;
 	return vector;
 }
+
 
 //Map Related
 void Map_Draw() {
@@ -120,13 +120,13 @@ void RenderScene(void) {
 
 // Called by GLUT library when idle (window not being resized or moved)
 void TimerFunction(int value) {
-	//Collision & Movement
+	//Colisao & Movimento & AI & Outros
 	
 	for (int i1 = 0; i1 < MAX_ENTITIES; i1++) {
 		if (slots[i1]) {
 			struct Entity* entity1 = &entities[i1];
 
-			//Check if is outside the map
+			//Caiu do mapa?
 			if (Distance(&entity1->position, &vector_origin) > map_radius) {
 				if (entity1->kind != 8) { 
 					Despawn(entity1->slot);
@@ -136,15 +136,36 @@ void TimerFunction(int value) {
 
 			switch (entity1->kind) {
 			case 0: {
-				//Movement
+				//entity1->frame[0] //tempo de ataque
+				//entity1->frame[1] //tempo de imobilizado depois de ser atacado
+				
+				//Ver se levou hit
+				if (entity1->health == 0) {
+					entity1->health = 1;
+					if (entity1->frame_imunity == 0) {
+						Map_Decrease();
+						player_penaltySpeed = 0;
+						entity1->frame_imunity = 30;
+						entity1->frame[1] = 10;
+						Spawn(Particle(entity1->position, 0, 2));
+					}
+				}
+				if (entity1->frame[1] > 0) { 
+					entity1->frame[1]--;
+					if (entity1->frame[1] == 0)	player_penaltySpeed = 1;
+				}
+
+				//Reduzir tempo de imunidade
+				if (entity1->frame_imunity > 0) entity1->frame_imunity--;
+
+				//Movimento
 				float finalSpeed = entity1->speed * player_penaltySpeed * PLAYER_MAXSPEED;
 				entity1->position.x += entity1->direction.x * finalSpeed;
 				entity1->position.y += entity1->direction.y * finalSpeed;
-				if (player_frame_imunity > 0) player_frame_imunity--;
-				if (player_frame_attack > 0) player_frame_attack--; 
+				if (entity1->frame[0] > 0) entity1->frame[0]--;
 				else entity1->speed = 0;
 
-				//Collision
+				//Colisao
 				for (int i2 = 1; i2 < MAX_ENTITIES; i2++) { // i2 = 1 porque 0 é o player
 					if (slots[i2]) {
 						struct Entity* entity2 = &entities[i2];
@@ -161,11 +182,11 @@ void TimerFunction(int value) {
 								entity1->position.y = entity2->position.y + vector.y;
 								break;
 							case -2:			//Hit
-								if (player_frame_imunity == 0) {
+								/*if (entity1->frame_imunity == 0) {
 									Map_Decrease();
 									player_penaltySpeed = 0;
-									player_frame_imunity = 30;
-								}
+									entity1->frame_imunity = 30;
+								}*/
 								break;
 							case 3:				//PickUp
 								Map_Increase();
@@ -176,46 +197,143 @@ void TimerFunction(int value) {
 					}
 				}
 			} break; //Player
-			case 1:
-			case 2:
-				break;
-			case 8: {
-				//Movement
-				entity1->position.x = player->position.x + entity1->direction.x * player->radius;
-				entity1->position.y = player->position.y + entity1->direction.y * player->radius;
-				entity1->frame++;
 
-				//Collision
+			case 1: {
+				//Reduzir tempo de imunidade
+				if (entity1->frame_imunity > 0) entity1->frame_imunity--;
+
+				//Rotina AI
+				//entity1->frame[0] //faze da rotina
+				//entity1->frame[1] //tempo da faze da rotina
+				switch (entity1->frame[0]) {
+				case 0: {
+					//Procura ponto aleatorio
+					entity1->AIpoint = RandomPosition();
+					entity1->direction = SetVectorLength(entity1->AIpoint.x - entity1->position.x, entity1->AIpoint.y - entity1->position.y, 1.0);
+					entity1->speed = 4.0f;
+					entity1->frame[0]++;
+				} break;
+				case 1: {
+					//Vai para la
+					entity1->position.x += entity1->direction.x * entity1->speed;
+					entity1->position.y += entity1->direction.y * entity1->speed;
+					//Ve se chegou
+					entity1->frame[1]++;
+					if (entity1->frame[1] >= 60 ||	// tem 2 segundos para chegar ao destino
+						Distance(&entity1->position, &entity1->AIpoint) < 20.0) {	// esta no destino
+						entity1->speed = 0;
+						entity1->frame[1] = 0;
+						entity1->frame[0]++;
+					}
+				} break;
+				case 2: {
+					//Espera 1s
+					entity1->frame[1]++;
+					if (entity1->frame[1] >= 30) {
+						entity1->frame[1] = 0;
+						entity1->frame[0]++;
+					}
+				} break;
+				case 3: {
+					//Atira pedra
+					entity1->frame[0]++;
+					Spawn(ThrowerRock(
+						entity1->position,
+						SetVectorLength(PLAYER.position.x - entity1->position.x, PLAYER.position.y - entity1->position.y, 1.0)
+					));
+				} break;
+				case 4: {
+					//Espera 1s
+					entity1->frame[1]++;
+					if (entity1->frame[1] >= 30) {
+						entity1->frame[1] = 0;
+						entity1->frame[0] = 0;
+					}
+				} break;
+				}
+
+				//Colisao
 				for (int i2 = 1; i2 < MAX_ENTITIES; i2++) { // i2 = 1 porque 0 é o player
 					if (slots[i2]) {
-						if (i1 == i2) continue;
 						struct Entity* entity2 = &entities[i2];
 
 						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
 							switch (entity2->surface) {
-							case -2:
-							case 2:
-								break;
-							case 0:
-								if (entity2->kind == 6) {
-									Spawn(PickUp(entity2->position));
-									Despawn(entity2->slot);
+							case 0: {
+								struct Vector vector = SetVectorLength(
+									entity1->position.x - entity2->position.x,
+									entity1->position.y - entity2->position.y,
+									entity2->radius + entity1->radius);
+								entity1->position.x = entity2->position.x + vector.x;
+								entity1->position.y = entity2->position.y + vector.y; 
+							} break;
+							case -1: {			//Hit
+								if (entity1->frame_imunity == 0) {
+									Spawn(Particle(entity1->position, 0, 2));
+									entity1->health--;
+									if (entity1->health <= 0) Despawn(entity1->slot);
+									else entity1->frame_imunity = 10;
 								}
+							} break;
+							}
+						}
+					}
+				}
+			} break; //Enemy thrower
+			
+			case 2: {
+				//Movimento
+				entity1->position.x += entity1->direction.x * entity1->speed;
+				entity1->position.y += entity1->direction.y * entity1->speed;
+
+				//Colisao
+				for (int i2 = 0; i2 < MAX_ENTITIES; i2++) {
+					if (slots[i2]) {
+						struct Entity* entity2 = &entities[i2];
+
+						if (IsInsideMyBoundries_Circle(entity1, entity2)) {
+							switch (entity2->surface) {
+							case 0:
+							case 1:
+								entity2->health = 0;
+							case -1:
+								Despawn(entity1->slot);
 								break;
 							}
 						}
 					}
 				}
-
-				if (entity1->frame > 3) {
+			} break; //Enemy thrower rock
+				
+			case 6: {
+				if (entity1->health == 0) {
+					Spawn(PickUp(entity1->position));
 					Despawn(entity1->slot);
-					continue;
+				}
+			} break; //Jar
+
+			case 8: {
+				//Tempo
+				entity1->frame[0]++;
+				if (entity1->frame[0] > 3) {
+					Despawn(entity1->slot);
 				}
 
+				//Movimento
+				entity1->position.x = PLAYER.position.x + entity1->direction.x * PLAYER.radius;
+				entity1->position.y = PLAYER.position.y + entity1->direction.y * PLAYER.radius;
 			} break; //Player Sword
+
+			case 9: {
+				entity1->frame_imunity--;
+				if (entity1->frame_imunity  == 0) {
+					Despawn(entity1->slot);
+				}			
+			} break; //Particle
 			}
 		}
 	}
+
 	//control time
 	count_timer++;
 
@@ -230,11 +348,11 @@ void keyboard(unsigned char key, int x, int y) {
 	case 27: exit(0); break;
 	case '1': Map_Decrease(); break;
 	case '2': Map_Increase(); break;
-	case 'W': case 'w': if (player_frame_attack == 0) { player->direction.x = 0;	player->direction.y = 1.0f;	player->speed += 1; } break;
-	case 'S': case 's': if (player_frame_attack == 0) { player->direction.x = 0;	player->direction.y = -1.0f;player->speed += 1; } break;
-	case 'D': case 'd': if (player_frame_attack == 0) { player->direction.x = 1.0f;	player->direction.y = 0;	player->speed += 1; } break;
-	case 'A': case 'a': if (player_frame_attack == 0) { player->direction.x = -1.0f;player->direction.y = 0;	player->speed += 1; } break;
-	case 'C': case 'c': if (player_frame_attack == 0) { Spawn(PlayerSword(*player));player_frame_attack = 3;	player->speed += 2;	} break;
+	case 'W': case 'w': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = 0;	PLAYER.direction.y = 1.0f;	PLAYER.speed += 1; } break;
+	case 'S': case 's': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = 0;	PLAYER.direction.y = -1.0f; PLAYER.speed += 1; } break;
+	case 'D': case 'd': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = 1.0f;	PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
+	case 'A': case 'a': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = -1.0f; PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
+	case 'C': case 'c': if (PLAYER.frame[0] == 0) { Spawn(PlayerSword(PLAYER)); PLAYER.frame[0] = 3;	PLAYER.speed += 1;	} break;
 	default: break;
 	}
 	glutPostRedisplay();
@@ -290,14 +408,10 @@ int main(int argc, char** argv) {
 
 	//Spawn entities
 	Spawn(Player());
-	player = &entities[0];
 
-	Spawn(Jar(RandomPosition()));
-	Spawn(Jar(RandomPosition()));
-	Spawn(Jar(RandomPosition()));
-	Spawn(Jar(RandomPosition()));
-	Spawn(Jar(RandomPosition()));
-	Spawn(Jar(RandomPosition()));
+	Spawn(Jar(RandomPosition())); 
+	Spawn(Block(RandomPosition()));
+	Spawn(Thrower(RandomPosition()));
 
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);
