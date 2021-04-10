@@ -885,8 +885,177 @@ void draw_jar() {
 	glEnd();
 }
 
-void draw_block() {
-	draw_circle(0.0f, 0.0f, 0.0f, 5);
+void draw_rock() {
+
+	//SOMBRA
+	glColor3f(0, 0, 0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glColor3f(0.3, 0.3, 0.3);
+	glVertex2f(-10, 30);
+	glVertex2f(-20, 30);
+	glVertex2f(-20, 40);
+	glVertex2f(-10, 50);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 10);
+	glVertex2f(-25, 10);
+	glVertex2f(-25, 20);
+	glVertex2f(-20, 30);
+	glVertex2f(-10, 30);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(20, 45);
+	glVertex2f(30, 25);
+	glVertex2f(30, 5);
+	glVertex2f(20, 5);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glColor3f(0.5, 0.5, 0.5);
+	glVertex2f(0, 50);
+	glVertex2f(20, 50);
+	glVertex2f(20, -10);
+	glVertex2f(0, -10);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(20, 40);
+	glVertex2f(30, 20);
+	glVertex2f(30, 0);
+	glVertex2f(20, 0);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 20);
+	glVertex2f(-20, 20);
+	glVertex2f(-20, 30);
+	glVertex2f(-10, 40);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 0);
+	glVertex2f(-25, 0);
+	glVertex2f(-25, 10);
+	glVertex2f(-20, 20);
+	glVertex2f(-10, 20);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 20);
+	glVertex2f(20, 20);
+	glVertex2f(20, -15);
+	glVertex2f(10, -15);
+	glEnd();
+
+	glColor3f(0.3, 0.3, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 0);
+	glVertex2f(0, -10);
+	glVertex2f(0, 50);
+	glVertex2f(-10, 60);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(5, -10);
+	glVertex2f(10, -15);
+	glVertex2f(10, 20);
+	glVertex2f(5, 30);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(20, -15);
+	glVertex2f(25, -10);
+	glVertex2f(25, 30);
+	glColor3f(0.5, 0.5, 0.5);
+	glVertex2f(10, 20);
+	glEnd();
+
+	glColor3f(1, 1, 1);
+	glBegin(GL_POLYGON);
+	glVertex2f(5, 30);
+	glVertex2f(25, 30);
+	glVertex2f(10, 20);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 60);
+	glVertex2f(0, 50);
+	glVertex2f(20, 50);
+	glVertex2f(20, 60);
+	glVertex2f(10, 70);
+	glVertex2f(0, 70);
+	glEnd();
+}
+
+void draw_tree() {
+
+	//SOMBRA
+	glColor3f(0, 0, 0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+	//CIMA
+	glColor3f(0.4, 0.4, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-35, 40);
+	glVertex2f(-25, 30);
+	glVertex2f(25, 30);
+	glVertex2f(35, 40);
+	glVertex2f(35, 50);
+	glVertex2f(10, 80);
+	glVertex2f(-10, 80);
+	glVertex2f(-35, 50);
+	glEnd();
+	//SOMBRA
+	glColor3f(0.09, 0.2, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-35, 40);
+	glVertex2f(-25, 30);
+	glVertex2f(-25, 20);
+	glVertex2f(-35, 30);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-25, 30);
+	glVertex2f(25, 30);
+	glVertex2f(25, 20);
+	glVertex2f(-25, 20);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(35, 40);
+	glVertex2f(25, 30);
+	glVertex2f(25, 20);
+	glVertex2f(35, 30);
+	glEnd();
+
+	//TRONCO
+	glColor3f(0.4, 0.2, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-15, 0);
+	glVertex2f(15, 0);
+	glVertex2f(5, 10);
+	glVertex2f(-5, 10);
+	glEnd();
+	glColor3f(0.4, 0.2, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-5, 10);
+	glVertex2f(-5, 25);
+	glVertex2f(5, 25);
+	glVertex2f(5, 10);
+	glEnd();
+	//SOMBRA
+	glColor3f(0.2, 0.09, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-5, 25);
+	glVertex2f(5, 25);
+	glVertex2f(5, 15);
+	glVertex2f(-5, 15);
+	glEnd();
 }
 
 void draw_playerSword() {
@@ -955,15 +1124,23 @@ void Draw(struct Entity* entity) {
 		break;
 
 	case 6: //Jar
-		glScalef(.25f, .25f, 1.0f);
-		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
+		glScalef(.18f, .18f, 1.0f);
+		glTranslatef(entity->position.x * 5.5, entity->position.y * 5.5, 0);
 		draw_jar();
 		break;
 
 	case 7: //Block
-		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x, entity->position.y, 0);
-		draw_block();
+		if (entity->health == 1) {
+			glScalef(.25f, .25f, 1.0f);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
+			draw_rock();
+		}
+		else
+		{
+			glScalef(.25f, .25f, 1.0f);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
+			draw_tree();
+		}
 		break;
 
 	case 8: {
