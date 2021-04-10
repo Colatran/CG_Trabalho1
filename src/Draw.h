@@ -16,6 +16,7 @@ void draw_circle(GLfloat r, GLfloat g, GLfloat b, float radius) {
 
 
 void draw_player() {
+	//SOMBRA
 	glColor3f(0.0, 0.0, 0.0);
 	glBegin(GL_TRIANGLE_FAN);
 	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
@@ -170,7 +171,7 @@ void draw_player() {
 	glVertex2f(-10, 50);
 	glVertex2f(-10, 40);
 	glEnd();
-	glColor3f(0.7, 0.7, 0.7);
+	glColor3f(1, 1, 1);
 	glBegin(GL_POLYGON);
 	glVertex2f(-17.5, 35);
 	glVertex2f(-12.5, 35);
@@ -210,7 +211,7 @@ void draw_player() {
 	glVertex2f(10, 50);
 	glVertex2f(10, 40);
 	glEnd();
-	glColor3f(0.7, 0.7, 0.7);
+	glColor3f(1, 1, 1);
 	glBegin(GL_POLYGON);
 	glVertex2f(17.5, 35);
 	glVertex2f(12.5, 35);
@@ -231,7 +232,7 @@ void draw_player() {
 	glEnd();
 
 	//PERNA_ESQ
-	glColor3f(0.7, 0.7, 0.7);
+	glColor3f(1, 1, 1);
 	glBegin(GL_POLYGON);
 	glVertex2f(-10, 30);
 	glVertex2f(0, 20);
@@ -239,7 +240,7 @@ void draw_player() {
 	glVertex2f(-12, 20);
 	glEnd();
 	//PERNA_DIR
-	glColor3f(0.7, 0.7, 0.7);
+	glColor3f(1, 1, 1);
 	glBegin(GL_POLYGON);
 	glVertex2f(10, 30);
 	glVertex2f(0, 20);
@@ -276,7 +277,229 @@ void draw_player() {
 }
 
 void draw_thrower() {
-	draw_circle(1.0f, 1.0f, 1.0f, 5);
+	//SOMBRA
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+	//BRAÇOS
+	glColor3f(0, 0.2, 0.4);
+	glBegin(GL_POLYGON);
+	glVertex2f(20, 60);
+	glVertex2f(30, 45);
+	glVertex2f(20, 45);
+	glVertex2f(10, 60);
+	glEnd();
+	glColor3f(0.3, 0.3, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(20, 45);
+	glVertex2f(30, 45);
+	glVertex2f(30, 30);
+	glVertex2f(20, 30);
+	glEnd();
+	glColor3f(0, 0.2, 0.4);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 60);
+	glVertex2f(-30, 45);
+	glVertex2f(-20, 45);
+	glVertex2f(-10, 60);
+	glEnd();
+	glColor3f(0.3, 0.3, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 45);
+	glVertex2f(-30, 45);
+	glVertex2f(-30, 30);
+	glVertex2f(-20, 30);
+	glEnd();
+	//OMBROS
+	glColor3f(0.3, 0.3, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 52);
+	glVertex2f(-20, 67);
+	glVertex2f(-35, 67);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(20, 52);
+	glVertex2f(20, 67);
+	glVertex2f(35, 67);
+	glEnd();
+
+	//TORSO
+	glColor3f(0.5, 0.5, 0.5);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 70);
+	glVertex2f(20, 70);
+	glVertex2f(20, 50);
+	glVertex2f(10, 40);
+	glVertex2f(-10, 40);
+	glVertex2f(-20, 50);
+	glEnd();
+	glColor3f(0.3, 0.3, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 50);
+	glVertex2f(20, 50);
+	glVertex2f(10, 40);
+	glVertex2f(-10, 40);
+	glEnd();
+	//PEITOS
+	glColor3f(0.5, 0.5, 0.5);
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 45);
+	glVertex2f(0, 47.5);
+	glVertex2f(0, 50);
+	glVertex2f(-20, 50);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 45);
+	glVertex2f(0, 47.5);
+	glVertex2f(0, 50);
+	glVertex2f(20, 50);
+	glEnd();
+	//PELVIS
+	glColor3f(0.5, 0.5, 0.5);
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 40);
+	glVertex2f(10, 25);
+	glVertex2f(0, 20);
+	glVertex2f(-10, 25);
+	glVertex2f(-10, 40);
+	glEnd();
+
+	//PERNA_DIR
+	glColor3f(0, 0.2, 0.4);
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 30);
+	glVertex2f(20, 20);
+	glVertex2f(10, 20);
+	glVertex2f(0, 30);
+	glEnd();
+	glColor3f(0.3, 0.3, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 20);
+	glVertex2f(20, 20);
+	glVertex2f(20, 10);
+	glVertex2f(10, 10);
+	glEnd();
+	//PE_DIR
+	glColor3f(0.5, 0.5, 0.5);
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 10);
+	glVertex2f(30, 10);
+	glVertex2f(30, 0);
+	glVertex2f(10, 0);
+	glEnd();
+
+	//PERNA_ESQ
+	glColor3f(0, 0.2, 0.4);
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 30);
+	glVertex2f(-20, 20);
+	glVertex2f(-10, 20);
+	glVertex2f(0, 30);
+	glEnd();
+	glColor3f(0.3, 0.3, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 20);
+	glVertex2f(-20, 20);
+	glVertex2f(-20, 10);
+	glVertex2f(-10, 10);
+	glEnd();
+	//PE_ESQ
+	glColor3f(0.5, 0.5, 0.5);
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 10);
+	glVertex2f(-30, 10);
+	glVertex2f(-30, 0);
+	glVertex2f(-10, 0);
+	glEnd();
+
+	//MAOs
+	glColor3f(1, 1, 1);
+	glBegin(GL_POLYGON);
+	glVertex2f(-32.5, 32.5);
+	glVertex2f(-17.5, 32.5);
+	glVertex2f(-17.5, 17.5);
+	glVertex2f(-32.5, 17.5);
+	glEnd();
+	glColor3f(1, 1, 1);
+	glBegin(GL_POLYGON);
+	glVertex2f(32.5, 32.5);
+	glVertex2f(17.5, 32.5);
+	glVertex2f(17.5, 17.5);
+	glVertex2f(32.5, 17.5);
+	glEnd();
+
+	//CABEÇA
+	glColor3f(0.75, 0.75, 0.75);
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 80);
+	glVertex2f(10, 55);
+	glVertex2f(-10, 55);
+	glVertex2f(-10, 80);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(5, 55);
+	glVertex2f(5, 50);
+	glVertex2f(-5, 50);
+	glVertex2f(-5, 55);
+	glEnd();
+
+	glColor3f(1, 1, 1);
+	glBegin(GL_POLYGON);
+	glVertex2f(-1, 65);
+	glVertex2f(-12, 65);
+	glVertex2f(-10, 70);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(1, 65);
+	glVertex2f(12, 65);
+	glVertex2f(10, 70);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-7, 78);
+	glVertex2f(7, 78);
+	glVertex2f(7, 72);
+	glVertex2f(0, 68);
+	glVertex2f(-7, 72);
+	glEnd();
+
+	//OLHO_DIR
+	glColor3f(0, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(3, 60);
+	glVertex2f(7, 60);
+	glVertex2f(7, 65);
+	glVertex2f(3, 65);
+	glEnd();
+	//OLHO_ESQ
+	glBegin(GL_POLYGON);
+	glColor3f(0, 0, 0);
+	glVertex2f(-3, 60);
+	glVertex2f(-7, 60);
+	glVertex2f(-7, 65);
+	glVertex2f(-3, 65);
+	glEnd();
+
+	//ROUPA
+	glColor3f(0.4, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 30);
+	glVertex2f(2, 10);
+	glVertex2f(-10, 30);
+	glEnd();
+	glColor3f(0.6, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 30);
+	glVertex2f(-2, 10);
+	glVertex2f(-10, 30);
+	glEnd();
+
+
 }
 
 void draw_throwerProjectile() {
@@ -284,7 +507,17 @@ void draw_throwerProjectile() {
 }
 
 void draw_blobSmall() {
-	draw_circle(0.1f, 0.8f, 0.1f, 5);
+	//SOMBRA
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+
 }
 
 void draw_blobBig() {
