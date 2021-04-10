@@ -517,19 +517,290 @@ void draw_blobSmall() {
 	}
 	glEnd();
 
+	//CORPO
+	glColor3f(0.4, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 50);
+	glVertex2f(25, 10);
+	glVertex2f(15, 0);
+	glVertex2f(-15, 0);
+	glVertex2f(-25, 10);
+	glEnd();
+
+	//BOCA
+	glBegin(GL_POLYGON);
+	glColor3f(0.4, 0.4, 0);
+	glVertex2f(0, 30);
+	glVertex2f(10, 22.5);
+	glColor3f(1, 1, 0);
+	glVertex2f(12, 15);
+	glVertex2f(-12, 15);
+	glColor3f(0.4, 0.4, 0);
+	glVertex2f(-10, 22.5);
+	glEnd();
+
+	//DENTES
+	glColor3f(0.4, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-8, 15);
+	glVertex2f(-5.5, 20);
+	glVertex2f(-3, 15);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(8, 15);
+	glVertex2f(5.5, 20);
+	glVertex2f(3, 15);
+	glEnd();
+
+	//CABEÇA
+	glColor3f(0.1, 0, 0);
+	//glColor3f(0.1, 0.1, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 20);
+	glVertex2f(-10, 40);
+	glVertex2f(10, 40);
+	glEnd();
+
+	//OLHOS
+	glColor3f(1, 1, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-5, 32);
+	glVertex2f(-1, 30);
+	glVertex2f(-2, 35);
+	glVertex2f(-5, 37);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(5, 32);
+	glVertex2f(1, 30);
+	glVertex2f(2, 34);
+	glVertex2f(5, 36);
+	glEnd();
 
 }
 
 void draw_blobBig() {
-	draw_circle(0.8f, 0.3f, 0.3f, 10);
+	//SOMBRA
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+	//CORPO
+	glColor3f(0.09, 0.2, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 50);
+	glVertex2f(25, 10);
+	glVertex2f(15, 0);
+	glVertex2f(-15, 0);
+	glVertex2f(-25, 10);
+	glEnd();
+
+	//BOCA
+	glBegin(GL_POLYGON);
+	glColor3f(0.4, 0.4, 0);
+	glVertex2f(0, 30);
+	glVertex2f(10, 22.5);
+	glColor3f(1, 1, 0);
+	glVertex2f(12, 15);
+	glVertex2f(-12, 15);
+	glColor3f(0.4, 0.4, 0);
+	glVertex2f(-10, 22.5);
+	glEnd();
+
+	//DENTES
+	glColor3f(0.09, 0.2, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-8, 15);
+	glVertex2f(-5.5, 20);
+	glVertex2f(-3, 15);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(8, 15);
+	glVertex2f(5.5, 20);
+	glVertex2f(3, 15);
+	glEnd();
+
+	//CABEÇA
+	glColor3f(0.05, 0.05, 0.05);
+	//glColor3f(0.1, 0.1, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 20);
+	glVertex2f(-10, 40);
+	glVertex2f(10, 40);
+	glEnd();
+
+	//OLHOS
+	glColor3f(1, 1, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-5, 32);
+	glVertex2f(-1, 30);
+	glVertex2f(-2, 35);
+	glVertex2f(-5, 37);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(5, 32);
+	glVertex2f(1, 30);
+	glVertex2f(2, 34);
+	glVertex2f(5, 36);
+	glEnd();
+
 }
 
 void draw_pickup() {
-	draw_circle(0.8f, 0.3f, 0.3f, 5);
+	glColor3f(1, 0.4, 0.4);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 50);
+	glVertex2f(-10, 50);
+	glVertex2f(-10, 40);
+	glVertex2f(-20, 40);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(20, 50);
+	glVertex2f(10, 50);
+	glVertex2f(10, 40);
+	glVertex2f(20, 40);
+	glEnd();
+
+	glColor3f(0.8, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 0);
+	glVertex2f(-30, 30);
+	glVertex2f(-20, 30);
+	glVertex2f(0, 10);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-30, 30);
+	glVertex2f(-20, 30);
+	glVertex2f(-20, 40);
+	glVertex2f(-30, 40);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-30, 40);
+	glVertex2f(-20, 40);
+	glVertex2f(-20, 50);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 30);
+	glVertex2f(0, 40);
+	glVertex2f(10, 50);
+	glVertex2f(10, 40);
+	glEnd();
+
+	glColor3f(0.4, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 30);
+	glVertex2f(-20, 40);
+	glVertex2f(-10, 40);
+	glVertex2f(0, 30);
+	glVertex2f(0, 10);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(20, 30);
+	glVertex2f(20, 40);
+	glVertex2f(10, 40);
+	glVertex2f(0, 30);
+	glVertex2f(0, 10);
+	glEnd();
+
+	glColor3f(0.6, 0, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 0);
+	glVertex2f(30, 30);
+	glVertex2f(20, 30);
+	glVertex2f(0, 10);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(30, 30);
+	glVertex2f(20, 30);
+	glVertex2f(20, 40);
+	glVertex2f(30, 40);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(30, 40);
+	glVertex2f(20, 40);
+	glVertex2f(20, 50);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 30);
+	glVertex2f(0, 40);
+	glVertex2f(-10, 50);
+	glVertex2f(-10, 40);
+	glEnd();
 }
 
 void draw_jar() {
-	draw_circle(0.2f, 0.1f, 0.1f, 5);
+	glBegin(GL_POLYGON);
+	glColor3f(0.8, 0.4, 0);
+	glVertex2f(-30, 10);
+	glVertex2f(-30, 45);
+	glVertex2f(-10, 60);
+	glVertex2f(10, 60);
+	glVertex2f(30, 45);
+	glVertex2f(30, 10);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-15, 80);
+	glVertex2f(-15, 85);
+	glVertex2f(15, 85);
+	glVertex2f(15, 80);
+	glEnd();
+
+	glColor3f(0.6, 0.3, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 60);
+	glVertex2f(-10, 80);
+	glVertex2f(10, 80);
+	glVertex2f(10, 60);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 0);
+	glVertex2f(-30, 10);
+	glVertex2f(30, 10);
+	glVertex2f(20, 0);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-30, 30);
+	glVertex2f(30, 30);
+	glVertex2f(30, 27.5);
+	glVertex2f(-30, 27.5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-30, 15);
+	glVertex2f(30, 15);
+	glVertex2f(30, 12.5);
+	glVertex2f(-30, 12.5);
+	glEnd();
+
+	glColor3f(0.19, 0.34, 0.41);
+	glBegin(GL_POLYGON);
+	glVertex2f(-35, 15);
+	glVertex2f(-35, 25);
+	glVertex2f(35, 25);
+	glVertex2f(35, 15);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-35, 30);
+	glVertex2f(-35, 40);
+	glVertex2f(35, 40);
+	glVertex2f(35, 30);
+	glEnd();
+	glColor3f(0.8, 0.8, 0.8);
+	glBegin(GL_POLYGON);
+	glVertex2f(-25, 30);
+	glVertex2f(-25, 40);
+	glVertex2f(-15, 40);
+	glVertex2f(-15, 30);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-25, 15);
+	glVertex2f(-25, 25);
+	glVertex2f(-15, 25);
+	glVertex2f(-15, 15);
+	glEnd();
 }
 
 void draw_block() {
@@ -570,8 +841,8 @@ void Draw(struct Entity* entity) {
 		break;
 
 	case 1: //Enemy Thrower
-		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x, entity->position.y, 0);
+		glScalef(.25f, .25f, 1.0f);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_thrower();
 		break;
 
@@ -582,26 +853,26 @@ void Draw(struct Entity* entity) {
 		break;
 
 	case 3: //Enemy Blob Small
-		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x, entity->position.y, 0);
+		glScalef(.25f, .25f, 1.0f);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_blobSmall();
 		break;
 
 	case 4: //Enemy Blob Big
-		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x, entity->position.y, 0);
+		glScalef(.5f, .5f, 1.0f);
+		glTranslatef(entity->position.x * 2, entity->position.y * 2, 0);
 		draw_blobBig();
 		break;
 
 	case 5: //PickUp
-		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x, entity->position.y, 0);
+		glScalef(.25f, .25f, 1.0f);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_pickup();
 		break;
 
 	case 6: //Jar
-		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x, entity->position.y, 0);
+		glScalef(.25f, .25f, 1.0f);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_jar();
 		break;
 
@@ -612,14 +883,14 @@ void Draw(struct Entity* entity) {
 		break;
 
 	case 8: {
-		float angle;
+		/*float angle;
 		if (entity->direction.x == 0) angle = asin(entity->direction.y);
 		else angle = acos(entity->direction.x);
-		angle = angle * 180.0 / 3.141593 + 67.5 + 45 * entity->frame[0] / 3;
+		angle = angle * 180.0 / 3.141593 + 67.5 + 45 * entity->frame[0] / 3;*/
 
 		glScalef(1.0f, 1.0f, 1.0f);
 		glTranslatef(entity->position.x - entity->direction.x * 10, entity->position.y - entity->direction.y * 10, 0);
-		glRotatef(angle, 0, 0, 1);
+		//glRotatef(angle, 0, 0, 1);
 
 		draw_playerSword();
 	} break; //Palyer Sword
