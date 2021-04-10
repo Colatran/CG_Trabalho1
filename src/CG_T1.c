@@ -3,6 +3,7 @@
 #define PLAYER entities[0]
 #define PLAYER_MAXSPEED 3
 #define MAX_ENTITIES 100
+#define BACKGROUND_COLOR 0.0f, 0.8f, 0.8f
 
 // Timer
 GLfloat count_timer = 0;
@@ -49,40 +50,90 @@ struct Vector RandomPosition() {
 }
 
 //Map Related
-void Map_Draw() {
-	glBegin(GL_TRIANGLE_FAN);
-	glColor3f(0.01f, 0.5f, 0.1f);
-	glVertex2f(ORIGIN - map_radius, ORIGIN);
-	glColor3f(0.01f, 0.2f, 0.1f);
-	glVertex2f(ORIGIN + map_radius, ORIGIN);
-	for (float angle = 1.6; angle < 4.7; angle += 0.1) {
-		float x = ORIGIN + sin(angle) * map_radius;
-		float y = 70 + cos(angle) * map_radius;
-		float gradient = angle/4.7;
+void Map_Draw() {//BACKGROUND_COLOR
+	/*if (0) {
+		glBegin(GL_TRIANGLE_FAN);
+		glColor3f(0.01f, 0.1f, 0.1f);
+		glVertex2f(ORIGIN + map_radius, ORIGIN);
+		for (float angle = 0.0f; angle < 3.1f; angle += 0.1f) {
+			float x = ORIGIN + sin(angle + 1.6) * map_radius;
+			float y = 100 + cos(angle + 1.6) * map_radius;
 
-		glColor3f(0.01f, 0.2f + 0.3 * angle / 4.7, 0.1f);
-		glVertex2f(x, y);
+			float percent = angle / 3.1f;
+			glColor3f(0.01f, .7*percent, 0.1f);
+			glVertex2f(x, y);
+		}
+		glColor3f(0.01f, 0.8f, 0.1f);
+		glVertex2f(ORIGIN - map_radius, ORIGIN);
+		glEnd();
 	}
-	glEnd();
-	
-	glBegin(GL_TRIANGLE_FAN);
-	glColor3f(0.01f, 0.3f, 0.1f);
-	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
-		float x = ORIGIN + sin(angle) * map_radius;
-		float y = ORIGIN + cos(angle) * map_radius;
-		glVertex2f(x, y);
-	}
-	glEnd();
+	*/
+	if (1) {
+		for (float angle = 0.01f; angle < 3.14f; angle += 0.01f) {
+			glBegin(GL_POLYGON);
 
-	glBegin(GL_TRIANGLE_FAN);
-	glColor3f(0.6f, 0.7f, 0.9f);
-	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
-		float x = ORIGIN + sin(angle) * (map_radius - 2.0);
-		float y = ORIGIN + cos(angle) * (map_radius - 2.0);
-		glVertex2f(x, y);
+			float x, y, percent;
+			percent = angle / 3.14f;
+			glColor3f(0.01f, 0.1f + 0.7f * percent, 0.1f);
+
+			x = ORIGIN + sin(angle + 1.56) * map_radius;
+			y = ORIGIN + cos(angle + 1.56) * map_radius;
+			glVertex2f(x, y);
+			x = ORIGIN + sin(angle + 1.57) * map_radius;
+			y = ORIGIN + cos(angle + 1.57) * map_radius;
+			glVertex2f(x, y);
+
+			glColor3f(BACKGROUND_COLOR);
+			x = ORIGIN + sin(angle + 1.57) * map_radius;
+			y = 50 + cos(angle + 1.57) * map_radius;
+			glVertex2f(x, y);
+			x = ORIGIN + sin(angle + 1.56) * map_radius;
+			y = 50 + cos(angle + 1.56) * map_radius;
+			glVertex2f(x, y);
+
+			glEnd();
+		}
 	}
-	glEnd();
-	
+
+
+
+	if (1) {
+		glBegin(GL_TRIANGLE_FAN);
+		glColor3f(0.01f, 0.3f, 0.1f);
+		for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
+			float x = ORIGIN + sin(angle) * map_radius;
+			float y = ORIGIN + cos(angle) * map_radius - 3;
+			glVertex2f(x, y);
+		}
+		glEnd();
+
+		glBegin(GL_TRIANGLE_FAN);
+		glColor3f(0.01f, 0.5f, 0.1f);
+		for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
+			float x = ORIGIN + sin(angle) * map_radius;
+			float y = ORIGIN + cos(angle) * map_radius;
+			glVertex2f(x, y);
+		}
+		glEnd();
+
+		float newRadius = map_radius - 4;
+		glBegin(GL_TRIANGLE_FAN);
+		glColor3f(0.01f, 0.3f, 0.1f);
+		for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
+			float x = ORIGIN + sin(angle) * newRadius;
+			float y = ORIGIN + cos(angle) * newRadius + 1.5;
+			glVertex2f(x, y);
+		}
+		glEnd();
+		glBegin(GL_TRIANGLE_FAN);
+		glColor3f(0.01f, 0.4f, 0.1f);
+		for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
+			float x = ORIGIN + sin(angle) * newRadius;
+			float y = ORIGIN + cos(angle) * newRadius - 1;
+			glVertex2f(x, y);
+		}
+		glEnd();
+	}
 }
 void Map_Decrease() { 
 	if (map_radius > 5) map_radius -= 5.0f;
@@ -127,6 +178,8 @@ void Despawn(int index, int forLevel) {
 	}
 }
 void LevelUp() {
+	if (!slots[0]) return;
+
 	int random, i;
 	level++;
 
@@ -591,7 +644,7 @@ void TimerFunction(int value) {
 		if (level_frame == 0) {
 			level_isEmpty = 0;
 			level_frame = 60;
-			LevelUp();
+			//LevelUp();
 		}
 	}
 
@@ -623,7 +676,7 @@ void keyboard(unsigned char key, int x, int y) {
 // Setup the rendering state
 void SetupRC(void) {
 	// Set clear color to blue
-	glClearColor(0.0f, 0.8f, 0.8f, 1.0f);
+	glClearColor(BACKGROUND_COLOR, 1.0f);
 }
 // Called by GLUT library when the window has changed size
 void ChangeSize(GLsizei w, GLsizei h) {
