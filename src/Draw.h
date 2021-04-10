@@ -518,79 +518,7 @@ void draw_blobSmall() {
 	glEnd();
 
 	//CORPO
-	glColor3f(0.4, 0, 0);
-	glBegin(GL_POLYGON);
-	glVertex2f(0, 50);
-	glVertex2f(25, 10);
-	glVertex2f(15, 0);
-	glVertex2f(-15, 0);
-	glVertex2f(-25, 10);
-	glEnd();
-
-	//BOCA
-	glBegin(GL_POLYGON);
-	glColor3f(0.4, 0.4, 0);
-	glVertex2f(0, 30);
-	glVertex2f(10, 22.5);
-	glColor3f(1, 1, 0);
-	glVertex2f(12, 15);
-	glVertex2f(-12, 15);
-	glColor3f(0.4, 0.4, 0);
-	glVertex2f(-10, 22.5);
-	glEnd();
-
-	//DENTES
-	glColor3f(0.4, 0, 0);
-	glBegin(GL_POLYGON);
-	glVertex2f(-8, 15);
-	glVertex2f(-5.5, 20);
-	glVertex2f(-3, 15);
-	glEnd();
-	glBegin(GL_POLYGON);
-	glVertex2f(8, 15);
-	glVertex2f(5.5, 20);
-	glVertex2f(3, 15);
-	glEnd();
-
-	//CABEÇA
-	glColor3f(0.1, 0, 0);
-	//glColor3f(0.1, 0.1, 0);
-	glBegin(GL_POLYGON);
-	glVertex2f(0, 20);
-	glVertex2f(-10, 40);
-	glVertex2f(10, 40);
-	glEnd();
-
-	//OLHOS
-	glColor3f(1, 1, 0);
-	glBegin(GL_POLYGON);
-	glVertex2f(-5, 32);
-	glVertex2f(-1, 30);
-	glVertex2f(-2, 35);
-	glVertex2f(-5, 37);
-	glEnd();
-	glBegin(GL_POLYGON);
-	glVertex2f(5, 32);
-	glVertex2f(1, 30);
-	glVertex2f(2, 34);
-	glVertex2f(5, 36);
-	glEnd();
-
-}
-
-void draw_blobBig() {
-	//SOMBRA
-	glColor3f(0.0, 0.0, 0.0);
-	glBegin(GL_TRIANGLE_FAN);
-	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
-		float x = sin(angle) * 20;
-		float y = cos(angle) * 20;
-		glVertex2f(x, y);
-	}
-	glEnd();
-
-	//CORPO
-	glColor3f(0.09, 0.2, 0);
+	glColor3f(0.6, 0, 0);
 	glBegin(GL_POLYGON);
 	glVertex2f(0, 50);
 	glVertex2f(25, 10);
@@ -646,6 +574,138 @@ void draw_blobBig() {
 	glVertex2f(1, 30);
 	glVertex2f(2, 34);
 	glVertex2f(5, 36);
+	glEnd();
+
+	//SOMBRA
+	glColor3f(0.4, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-25, 10);
+	glVertex2f(-15, 0);
+	glVertex2f(-10, 5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-15, 0);
+	glVertex2f(15, 0);
+	glVertex2f(15, 5);
+	glVertex2f(-15, 5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-12, 15);
+	glVertex2f(0, 8);
+	glVertex2f(0, 15);
+	glEnd();
+	glColor3f(0.8, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(25, 10);
+	glVertex2f(15, 0);
+	glVertex2f(10, 5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(12, 15);
+	glVertex2f(0, 8);
+	glVertex2f(0, 15);
+	glEnd();
+
+}
+
+void draw_blobBig() {
+	//SOMBRA
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+	//CORPO
+	glColor3f(0.02, 0.4, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 50);
+	glVertex2f(25, 10);
+	glVertex2f(15, 0);
+	glVertex2f(-15, 0);
+	glVertex2f(-25, 10);
+	glEnd();
+
+	//BOCA
+	glBegin(GL_POLYGON);
+	glColor3f(0.4, 0.4, 0);
+	glVertex2f(0, 30);
+	glVertex2f(10, 22.5);
+	glColor3f(1, 1, 0);
+	glVertex2f(12, 15);
+	glVertex2f(-12, 15);
+	glColor3f(0.4, 0.4, 0);
+	glVertex2f(-10, 22.5);
+	glEnd();
+
+	//DENTES
+	glColor3f(0.09, 0.2, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-8, 15);
+	glVertex2f(-5.5, 20);
+	glVertex2f(-3, 15);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(8, 15);
+	glVertex2f(5.5, 20);
+	glVertex2f(3, 15);
+	glEnd();
+
+	//CABEÇA
+	glColor3f(0.05, 0.05, 0.05);
+	//glColor3f(0.1, 0.1, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 20);
+	glVertex2f(-10, 40);
+	glVertex2f(10, 40);
+	glEnd();
+
+	//OLHOS
+	glColor3f(1, 1, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-5, 32);
+	glVertex2f(-1, 30);
+	glVertex2f(-2, 35);
+	glVertex2f(-5, 37);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(5, 32);
+	glVertex2f(1, 30);
+	glVertex2f(2, 34);
+	glVertex2f(5, 36);
+	glEnd();
+
+	//SOMBRA
+	glColor3f(0.09, 0.2, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-25, 10);
+	glVertex2f(-15, 0);
+	glVertex2f(-10, 5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-15, 0);
+	glVertex2f(15, 0);
+	glVertex2f(15, 5);
+	glVertex2f(-15, 5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-12, 15);
+	glVertex2f(0, 8);
+	glVertex2f(0, 15);
+	glEnd();
+	glColor3f(0.09, 0.3, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(25, 10);
+	glVertex2f(15, 0);
+	glVertex2f(10, 5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(12, 15);
+	glVertex2f(0, 8);
+	glVertex2f(0, 15);
 	glEnd();
 
 }
