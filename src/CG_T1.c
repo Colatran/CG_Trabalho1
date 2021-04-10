@@ -1,8 +1,8 @@
 #include <windows.h>
-#include <gl/glut.h>
 #include "Draw.h"
-#define MAX_ENTITIES 100
 #define PLAYER entities[0]
+#define PLAYER_MAXSPEED 3
+#define MAX_ENTITIES 100
 
 // Timer
 GLfloat count_timer = 0;

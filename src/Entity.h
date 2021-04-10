@@ -1,9 +1,8 @@
 #pragma once
 #include <math.h>
-#define ORIGIN 125 //500 / 4
-#define PLAYER_MAXSPEED 3
-
 #include <stdio.h>
+#define ORIGIN 125 //500 / 4
+
 
 struct Vector {
 	float x;
