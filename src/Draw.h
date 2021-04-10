@@ -917,9 +917,11 @@ void Draw(struct Entity* entity) {
 	switch (entity->kind) {
 
 	case 0: //Palyer
-		glScalef(.25f, .25f, 1.0f);
-		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
-		draw_player();
+		if (entity->frame[2]) {
+			glScalef(.25f, .25f, 1.0f);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
+			draw_player();
+		}
 		break;
 
 	case 1: //Enemy Thrower

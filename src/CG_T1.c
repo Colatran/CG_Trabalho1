@@ -34,7 +34,14 @@ float RandomFloat(float min, float max) {
 }
 struct Vector RandomPosition() {
 	float angle = RandomFloat(0, 360);
-	float length = RandomFloat(0, map_radius);
+
+	float length = RandomFloat(0, map_radius) *1.5f;
+	if (length > map_radius) {
+		float difference = length - map_radius;
+		length -= difference * 2;
+	}
+	if (length < map_radius / 10) length *= 10;
+
 	struct Vector vector;
 	vector.x = sin(angle) * length + ORIGIN;
 	vector.y = cos(angle) * length + ORIGIN;
@@ -156,7 +163,7 @@ void LevelUp() {
 	}
 
 	//Obstaculos
-	random = rand() % 10;
+	random = rand() % (int)(map_radius / 10);
 	for (i = 0; i <= random; i++) {
 		Spawn(Block(RandomPosition()));
 	}
@@ -200,8 +207,9 @@ void TimerFunction(int value) {
 			case 0: {
 				//entity1->frame[0] //tempo de ataque
 				//entity1->frame[1] //tempo de imobilizado depois de ser atacado
-				
-				//Ver se levou hit
+				//entity1->frame[2] //deve ou nao desenha o personagem (efeito de estar himune) 0-visivel 1-invizivel
+
+				//Hit
 				if (entity1->health == 0) {
 					entity1->health = 1;
 					if (entity1->frame_imunity == 0) {
@@ -212,13 +220,18 @@ void TimerFunction(int value) {
 						Spawn(Particle(entity1->position, 0, 2));
 					}
 				}
+				if (entity1->frame_imunity > 0) { 
+					entity1->frame_imunity--;
+					if (entity1->frame_imunity == 0) entity1->frame[2] = 1;
+					else {
+						if (entity1->frame[2])entity1->frame[2] = 0;
+						else entity1->frame[2] = 1;
+					}
+				}
 				if (entity1->frame[1] > 0) { 
 					entity1->frame[1]--;
 					if (entity1->frame[1] == 0)	player_penaltySpeed = 1;
 				}
-
-				//Reduzir tempo de imunidade
-				if (entity1->frame_imunity > 0) entity1->frame_imunity--;
 
 				//Movimento
 				float finalSpeed = entity1->speed * player_penaltySpeed * PLAYER_MAXSPEED;
