@@ -68,7 +68,7 @@ void Map_Draw() {
 	glEnd();
 
 	glBegin(GL_TRIANGLE_FAN);
-	glColor3f(0.8f, 0.8f, 0.1f);
+	glColor3f(0.6f, 0.7f, 0.9f);
 	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
 		float x = ORIGIN + sin(angle) * (map_radius - 2.0);
 		float y = ORIGIN + cos(angle) * (map_radius - 2.0);

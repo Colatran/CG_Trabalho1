@@ -651,6 +651,17 @@ void draw_blobBig() {
 }
 
 void draw_pickup() {
+
+	//SOMBRA
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
 	glColor3f(1, 0.4, 0.4);
 	glBegin(GL_POLYGON);
 	glVertex2f(-20, 50);
@@ -733,6 +744,17 @@ void draw_pickup() {
 }
 
 void draw_jar() {
+
+	//SOMBRA
+	glColor3f(0, 0, 0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
 	glBegin(GL_POLYGON);
 	glColor3f(0.8, 0.4, 0);
 	glVertex2f(-30, 10);
@@ -883,14 +905,14 @@ void Draw(struct Entity* entity) {
 		break;
 
 	case 8: {
-		/*float angle;
+		float angle;
 		if (entity->direction.x == 0) angle = asin(entity->direction.y);
 		else angle = acos(entity->direction.x);
-		angle = angle * 180.0 / 3.141593 + 67.5 + 45 * entity->frame[0] / 3;*/
+		angle = angle * 180.0 / 3.141593 + 67.5 + 45 * entity->frame[0] / 3;
 
 		glScalef(1.0f, 1.0f, 1.0f);
 		glTranslatef(entity->position.x - entity->direction.x * 10, entity->position.y - entity->direction.y * 10, 0);
-		//glRotatef(angle, 0, 0, 1);
+		glRotatef(angle, 0, 0, 1);
 
 		draw_playerSword();
 	} break; //Palyer Sword
