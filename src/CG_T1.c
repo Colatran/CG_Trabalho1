@@ -19,6 +19,9 @@ struct Entity entities[MAX_ENTITIES];
 int slots[MAX_ENTITIES];
 float player_penaltySpeed = 1;
 
+int level = 0;
+int level_isEmpty = 1;
+int level_frame = 60;
 
 
 
@@ -37,7 +40,6 @@ struct Vector RandomPosition() {
 	vector.y = cos(angle) * length + ORIGIN;
 	return vector;
 }
-
 
 //Map Related
 void Map_Draw() {
@@ -97,9 +99,70 @@ void Spawn(struct Entity entity) {
 	entities[slot] = entity;
 	entities[slot].slot = slot;
 }
-void Despawn(int index) {
+void Despawn(int index, int forLevel) {
 	slots[index] = 0;
+
+	if (forLevel) {
+		int mapIsEmpty = 1;
+		int kind, i;
+
+		for (i = 1; i < MAX_ENTITIES; i++) {
+			kind = entities[i].kind;
+			if (slots[i]) {
+				if (kind > 0 && kind < 5) {
+					mapIsEmpty = 0;
+					i = MAX_ENTITIES;
+				}
+			}
+		}
+
+		if (mapIsEmpty) level_isEmpty = 1;
+	}
 }
+void LevelUp() {
+	int random, i;
+	level++;
+
+	//Limpar obstaculos
+	for (i = 1; i < MAX_ENTITIES; i++) {
+		if (slots[i]) {
+			struct Entity* entity = &entities[i];
+			if (entity->kind == 7) {
+				Despawn(entity->slot, 0);
+			}
+		}
+	}
+
+	//Inimigos
+	for (i = 0; i < level; i++) {
+		random = rand() % 3;
+		switch (random) {
+		case 0:
+			Spawn(Thrower(RandomPosition()));
+			break;
+		case 1:
+			Spawn(BlobSmall(RandomPosition()));
+			break;
+		case 2:
+			Spawn(BlobBig(RandomPosition()));
+			break;
+		}
+	}
+
+	//Jarras
+	random = rand() % 5;
+	for (i = 0; i <= random; i++) {
+		Spawn(Jar(RandomPosition()));
+	}
+
+	//Obstaculos
+	random = rand() % 10;
+	for (i = 0; i <= random; i++) {
+		Spawn(Block(RandomPosition()));
+	}
+}
+
+
 
 // Called to draw scene
 void RenderScene(void) {
@@ -121,7 +184,6 @@ void RenderScene(void) {
 // Called by GLUT library when idle (window not being resized or moved)
 void TimerFunction(int value) {
 	//Colisao & Movimento & AI & Outros
-	
 	for (int i1 = 0; i1 < MAX_ENTITIES; i1++) {
 		if (slots[i1]) {
 			struct Entity* entity1 = &entities[i1];
@@ -129,7 +191,7 @@ void TimerFunction(int value) {
 			//Caiu do mapa?
 			if (Distance(&entity1->position, &vector_origin) > map_radius) {
 				if (entity1->kind != 8) { 
-					Despawn(entity1->slot);
+					Despawn(entity1->slot, 1);
 					if (i1 == 0) Spawn(Player());
 				}
 			}
@@ -263,7 +325,7 @@ void TimerFunction(int value) {
 								if (entity1->frame_imunity == 0) {
 									Spawn(Particle(entity1->position, 0, 2));
 									entity1->health--;
-									if (entity1->health <= 0) Despawn(entity1->slot);
+									if (entity1->health <= 0) Despawn(entity1->slot, 1);
 									else entity1->frame_imunity = 5;
 								}
 							} break;
@@ -289,7 +351,7 @@ void TimerFunction(int value) {
 							case 1:
 								entity2->health = 0;
 							case -1:
-								Despawn(entity1->slot);
+								Despawn(entity1->slot, 1);
 								break;
 							}
 						}
@@ -363,7 +425,7 @@ void TimerFunction(int value) {
 								if (entity1->frame_imunity == 0) {
 									Spawn(Particle(entity1->position, 0, 2));
 									entity1->health--;
-									if (entity1->health <= 0) Despawn(entity1->slot);
+									if (entity1->health <= 0) Despawn(entity1->slot, 1);
 									else entity1->frame_imunity = 5;
 								}
 							} break;
@@ -442,7 +504,7 @@ void TimerFunction(int value) {
 								if (entity1->frame_imunity == 0) {
 									Spawn(Particle(entity1->position, 0, 2));
 									entity1->health--;
-									if (entity1->health <= 0) Despawn(entity1->slot);
+									if (entity1->health <= 0) Despawn(entity1->slot, 1);
 									else entity1->frame_imunity = 5;
 								}
 							} break;
@@ -462,14 +524,14 @@ void TimerFunction(int value) {
 				if (entity1->frame_imunity > 0) entity1->frame_imunity--;
 				else if(entity1->health == 0) {
 					Map_Increase();
-					Despawn(entity1->slot);
+					Despawn(entity1->slot, 0);
 				}
 			} break; //PickUp
 
 			case 6: {
 				if (entity1->health == 0) {
 					Spawn(PickUp(entity1->position));
-					Despawn(entity1->slot);
+					Despawn(entity1->slot, 0);
 				}
 			} break; //Jar
 
@@ -479,7 +541,7 @@ void TimerFunction(int value) {
 				//Tempo
 				entity1->frame[0]++;
 				if (entity1->frame[0] > 3) {
-					Despawn(entity1->slot);
+					Despawn(entity1->slot, 0);
 				}
 
 				//Movimento
@@ -503,10 +565,20 @@ void TimerFunction(int value) {
 			case 9: {
 				entity1->frame_imunity--;
 				if (entity1->frame_imunity  == 0) {
-					Despawn(entity1->slot);
+					Despawn(entity1->slot, 0);
 				}			
 			} break; //Particle
 			}
+		}
+	}
+
+	//Intervalo entre niveis
+	if (level_isEmpty) { 
+		level_frame--;
+		if (level_frame == 0) {
+			level_isEmpty = 0;
+			level_frame = 60;
+			LevelUp();
 		}
 	}
 
@@ -579,17 +651,29 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(125, 125);
 	glutCreateWindow("EchoLands");
 
-	vector_origin.x = ORIGIN; 
+	vector_origin.x = ORIGIN;
 	vector_origin.y = ORIGIN;
 
 	//Spawn entities
 	Spawn(Player());
 
-	Spawn(Jar(RandomPosition())); 
-	Spawn(Block(RandomPosition()));
-	Spawn(Thrower(RandomPosition()));
-	Spawn(BlobSmall(RandomPosition()));
-	Spawn(BlobBig(RandomPosition()));
+	/*struct Vector vetor;
+	for (int i1 = 1; i1 < 5; i1++) {
+		vetor.y = i1 * 10 + ORIGIN;
+		for (int i2 = 1; i2 < 5; i2++) {
+			vetor.x = i2 * 10+ ORIGIN;
+			Spawn(Jar(vetor));
+		}
+	}
+	for (int i1 = -1; i1 > -5; i1--) {
+		vetor.y = i1 * 10 + ORIGIN;
+		for (int i2 = 1; i2 < 5; i2++) {
+			vetor.x = i2 * 10 + ORIGIN;
+			Spawn(Jar(vetor));
+		}
+	}*/
+
+
 
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);

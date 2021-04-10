@@ -89,7 +89,7 @@ struct Entity PlayerSword(struct Entity player) {
 	entity.direction = player.direction;
 
 	entity.surface = -1;
-	entity.radius = 15;
+	entity.radius = 25;
 	entity.kind = 8;
 	entity.frame[0] = 0;
 	return entity;
