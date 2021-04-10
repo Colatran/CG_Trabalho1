@@ -953,8 +953,8 @@ void Draw(struct Entity* entity) {
 		break;
 
 	case 6: //Jar
-		glScalef(.25f, .25f, 1.0f);
-		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
+		glScalef(.18f, .18f, 1.0f);
+		glTranslatef(entity->position.x * 5.5, entity->position.y * 5.5, 0);
 		draw_jar();
 		break;
 
