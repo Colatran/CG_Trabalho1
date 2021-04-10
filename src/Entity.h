@@ -76,8 +76,9 @@ struct Entity Player() {
 	entity.radius = 10;
 	entity.kind = 0;
 	entity.health = 1;
-	entity.frame[0] = 0; 
-	entity.frame[1] = 0; 
+	entity.frame[0] = 0;
+	entity.frame[1] = 0;
+	entity.frame[2] = 1;
 	entity.frame_imunity = 0;
 	return entity;
 }
