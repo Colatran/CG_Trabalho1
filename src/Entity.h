@@ -124,6 +124,7 @@ struct Entity Block(struct Vector position) {
 	entity.surface = 0;
 	entity.radius = 10;
 	entity.kind = 7;
+	entity.frame_imunity = rand() % 2;
 	return entity;
 }
 struct Entity Particle(struct Vector position, int type, int time) {

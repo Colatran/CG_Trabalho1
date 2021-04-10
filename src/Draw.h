@@ -1130,7 +1130,7 @@ void Draw(struct Entity* entity) {
 		break;
 
 	case 7: //Block
-		if (entity->health == 1) {
+		if (entity->frame_imunity == 1) {
 			glScalef(.25f, .25f, 1.0f);
 			glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 			draw_rock();

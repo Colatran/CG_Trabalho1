@@ -50,93 +50,77 @@ struct Vector RandomPosition() {
 }
 
 //Map Related
-void Map_Draw() {//BACKGROUND_COLOR
-	/*if (0) {
-		glBegin(GL_TRIANGLE_FAN);
-		glColor3f(0.01f, 0.1f, 0.1f);
-		glVertex2f(ORIGIN + map_radius, ORIGIN);
-		for (float angle = 0.0f; angle < 3.1f; angle += 0.1f) {
-			float x = ORIGIN + sin(angle + 1.6) * map_radius;
-			float y = 100 + cos(angle + 1.6) * map_radius;
+void Map_Draw() {
+	//Torre
+	for (float angle = 0.01f; angle < 3.14f; angle += 0.01f) {
+		glBegin(GL_POLYGON);
 
-			float percent = angle / 3.1f;
-			glColor3f(0.01f, .7*percent, 0.1f);
-			glVertex2f(x, y);
-		}
-		glColor3f(0.01f, 0.8f, 0.1f);
-		glVertex2f(ORIGIN - map_radius, ORIGIN);
+		float x, y, percent, color;
+		percent = angle / 3.14f;
+		//color = 0.3f + percent * 0.6f;
+		//glColor3f(0.01f, 0.1f + 0.7f * percent, 0.1f);
+		
+		//glColor3f(0.2f, 0.23f, 0.17f);
+		//glColor3f(0.67f, 0.83f, 0.61f);
+		glColor3f(0.2f + percent * 0.47f, 0.23f + percent * 0.6f, 0.17f + percent * 0.44f);
+
+		x = ORIGIN + sin(angle + 1.56) * map_radius;
+		y = ORIGIN + cos(angle + 1.56) * map_radius;
+		glVertex2f(x, y);
+		x = ORIGIN + sin(angle + 1.57) * map_radius;
+		y = ORIGIN + cos(angle + 1.57) * map_radius;
+		glVertex2f(x, y);
+
+		glColor3f(BACKGROUND_COLOR);
+		x = ORIGIN + sin(angle + 1.57) * map_radius;
+		y = 50 + cos(angle + 1.57) * map_radius;
+		glVertex2f(x, y);
+		x = ORIGIN + sin(angle + 1.56) * map_radius;
+		y = 50 + cos(angle + 1.56) * map_radius;
+		glVertex2f(x, y);
+
 		glEnd();
 	}
-	*/
-	if (1) {
-		for (float angle = 0.01f; angle < 3.14f; angle += 0.01f) {
-			glBegin(GL_POLYGON);
 
-			float x, y, percent;
-			percent = angle / 3.14f;
-			glColor3f(0.01f, 0.1f + 0.7f * percent, 0.1f);
-
-			x = ORIGIN + sin(angle + 1.56) * map_radius;
-			y = ORIGIN + cos(angle + 1.56) * map_radius;
-			glVertex2f(x, y);
-			x = ORIGIN + sin(angle + 1.57) * map_radius;
-			y = ORIGIN + cos(angle + 1.57) * map_radius;
-			glVertex2f(x, y);
-
-			glColor3f(BACKGROUND_COLOR);
-			x = ORIGIN + sin(angle + 1.57) * map_radius;
-			y = 50 + cos(angle + 1.57) * map_radius;
-			glVertex2f(x, y);
-			x = ORIGIN + sin(angle + 1.56) * map_radius;
-			y = 50 + cos(angle + 1.56) * map_radius;
-			glVertex2f(x, y);
-
-			glEnd();
-		}
+	//Arena
+	glBegin(GL_TRIANGLE_FAN);
+	glColor3f(0.3f, 0.3f, 0.3f);
+	for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
+		float x = ORIGIN + sin(angle) * map_radius;
+		float y = ORIGIN + cos(angle) * map_radius - 3;
+		glVertex2f(x, y);
 	}
+	glEnd();
 
-
-
-	if (1) {
-		glBegin(GL_TRIANGLE_FAN);
-		glColor3f(0.01f, 0.3f, 0.1f);
-		for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
-			float x = ORIGIN + sin(angle) * map_radius;
-			float y = ORIGIN + cos(angle) * map_radius - 3;
-			glVertex2f(x, y);
-		}
-		glEnd();
-
-		glBegin(GL_TRIANGLE_FAN);
-		glColor3f(0.01f, 0.5f, 0.1f);
-		for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
-			float x = ORIGIN + sin(angle) * map_radius;
-			float y = ORIGIN + cos(angle) * map_radius;
-			glVertex2f(x, y);
-		}
-		glEnd();
-
-		float newRadius = map_radius - 4;
-		glBegin(GL_TRIANGLE_FAN);
-		glColor3f(0.01f, 0.3f, 0.1f);
-		for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
-			float x = ORIGIN + sin(angle) * newRadius;
-			float y = ORIGIN + cos(angle) * newRadius + 1.5;
-			glVertex2f(x, y);
-		}
-		glEnd();
-		glBegin(GL_TRIANGLE_FAN);
-		glColor3f(0.01f, 0.4f, 0.1f);
-		for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
-			float x = ORIGIN + sin(angle) * newRadius;
-			float y = ORIGIN + cos(angle) * newRadius - 1;
-			glVertex2f(x, y);
-		}
-		glEnd();
+	glBegin(GL_TRIANGLE_FAN);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
+		float x = ORIGIN + sin(angle) * map_radius;
+		float y = ORIGIN + cos(angle) * map_radius;
+		glVertex2f(x, y);
 	}
+	glEnd();
+
+	float newRadius = map_radius - 4;
+	glBegin(GL_TRIANGLE_FAN);
+	glColor3f(0.3f, 0.3f, 0.3f);
+	for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
+		float x = ORIGIN + sin(angle) * newRadius;
+		float y = ORIGIN + cos(angle) * newRadius + 1.5;
+		glVertex2f(x, y);
+	}
+	glEnd();
+	glBegin(GL_TRIANGLE_FAN);
+	glColor3f(0.3f, 0.5f, 0.2f);
+	for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
+		float x = ORIGIN + sin(angle) * newRadius;
+		float y = ORIGIN + cos(angle) * newRadius - 1;
+		glVertex2f(x, y);
+	}
+	glEnd();
 }
 void Map_Decrease() { 
-	if (map_radius > 5) map_radius -= 5.0f;
+	if (map_radius > 10) map_radius -= 5.0f;
 }
 void Map_Increase() { 
 	if (map_radius < 120) map_radius += 5.0f;
@@ -644,7 +628,7 @@ void TimerFunction(int value) {
 		if (level_frame == 0) {
 			level_isEmpty = 0;
 			level_frame = 60;
-			//LevelUp();
+			LevelUp();
 		}
 	}
 
