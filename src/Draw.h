@@ -1065,19 +1065,33 @@ void draw_playerSword() {
 }
 
 void draw_hitMarker() {
-	glColor3f(1.0, 0, 0);
+
+	glColor3f(1, 0, 0);
 	glBegin(GL_POLYGON);
-	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
-		float x = sin(angle) * 5;
-		float y = cos(angle) * 5;
-		glVertex2f(x, y);
-	}
-	for (float angle = 2 * 3.14159f; angle > 0; angle -= 0.1) {
-		float x = sin(angle) * 4;
-		float y = cos(angle) * 4;
-		glVertex2f(x, y);
-	}
+	glVertex2f(-35, -25);
+	glVertex2f(-25, -35);
+	glVertex2f(-5, -15);
+	glVertex2f(-15, -5);
 	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(35, -25);
+	glVertex2f(25, -35);
+	glVertex2f(5, -15);
+	glVertex2f(15, -5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(35, 25);
+	glVertex2f(25, 35);
+	glVertex2f(5, 15);
+	glVertex2f(15, 5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-35, 25);
+	glVertex2f(-25, 35);
+	glVertex2f(-5, 15);
+	glVertex2f(-15, 5);
+	glEnd();
+
 }
 
 
@@ -1157,8 +1171,8 @@ void Draw(struct Entity* entity) {
 	} break; //Palyer Sword
 
 	case 9: //HitMarker
-		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x, entity->position.y, 0);
+		glScalef(.25f, .25f, 1.0f);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_hitMarker();
 		break;
 	}
