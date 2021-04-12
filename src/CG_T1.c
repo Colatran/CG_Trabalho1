@@ -1,11 +1,8 @@
-#include <windows.h>
 #include "Draw.h"
 #define PLAYER entities[0]
 #define PLAYER_MAXSPEED 3
 #define MAX_ENTITIES 100
 #define BACKGROUND_COLOR 0.0f, 0.8f, 0.8f
-
-GLint isPaused = 1;
 
 // Timer
 GLfloat count_timer = 0;
