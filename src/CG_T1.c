@@ -36,7 +36,7 @@ float RandomFloat(float min, float max) {
 struct Vector RandomPosition() {
 	float angle = RandomFloat(0, 360);
 
-	float length = RandomFloat(0, map_radius) *1.5f;
+	float length = RandomFloat(0, map_radius) * 1.5f;
 	if (length > map_radius) {
 		float difference = length - map_radius;
 		length -= difference * 2;
@@ -114,10 +114,10 @@ void Map_Draw() {
 	}
 	glEnd();
 }
-void Map_Decrease() { 
+void Map_Decrease() {
 	if (map_radius > 10) map_radius -= 5.0f;
 }
-void Map_Increase() { 
+void Map_Increase() {
 	if (map_radius < 120) map_radius += 5.0f;
 }
 
@@ -229,7 +229,7 @@ void TimerFunction(int value) {
 
 			//Caiu do mapa?
 			if (Distance(&entity1->position, &vector_origin) > map_radius) {
-				if (entity1->kind != 8) { 
+				if (entity1->kind != 8) {
 					Despawn(entity1->slot, 1);
 					if (i1 == 0) Spawn(Player());
 				}
@@ -252,7 +252,7 @@ void TimerFunction(int value) {
 						Spawn(Particle(entity1->position, 0, 2));
 					}
 				}
-				if (entity1->frame_imunity > 0) { 
+				if (entity1->frame_imunity > 0) {
 					entity1->frame_imunity--;
 					if (entity1->frame_imunity == 0) entity1->frame[2] = 1;
 					else {
@@ -260,7 +260,7 @@ void TimerFunction(int value) {
 						else entity1->frame[2] = 1;
 					}
 				}
-				if (entity1->frame[1] > 0) { 
+				if (entity1->frame[1] > 0) {
 					entity1->frame[1]--;
 					if (entity1->frame[1] == 0)	player_penaltySpeed = 1;
 				}
@@ -364,7 +364,7 @@ void TimerFunction(int value) {
 									entity1->position.y - entity2->position.y,
 									entity2->radius + entity1->radius);
 								entity1->position.x = entity2->position.x + vector.x;
-								entity1->position.y = entity2->position.y + vector.y; 
+								entity1->position.y = entity2->position.y + vector.y;
 							} break;
 							case -1: {			//Hit
 								if (entity1->frame_imunity == 0) {
@@ -379,7 +379,7 @@ void TimerFunction(int value) {
 					}
 				}
 			} break; //Enemy thrower
-			
+
 			case 2: {
 				//Movimento
 				entity1->position.x += entity1->direction.x * entity1->speed;
@@ -403,7 +403,7 @@ void TimerFunction(int value) {
 					}
 				}
 			} break; //Enemy thrower rock
-				
+
 			case 3: {
 				//Rotina AI
 				//entity1->frame[0] //fase da rotina
@@ -424,7 +424,7 @@ void TimerFunction(int value) {
 					entity1->position.y += entity1->direction.y * entity1->speed;
 					//Durante 5 frames
 					entity1->frame[1]--;
-					if(entity1->frame[1] == 0){
+					if (entity1->frame[1] == 0) {
 						//Passa para a proxima faze da rotina
 						entity1->frame[0]++;
 
@@ -433,7 +433,7 @@ void TimerFunction(int value) {
 						if (entity1->frame_imunity == 3) entity1->frame_imunity = 0;
 
 						//Se ja for o 3o salto espera 60 frames, se nao apenas 10
-						if(entity1->frame_imunity == 0) entity1->frame[1] = 60;
+						if (entity1->frame_imunity == 0) entity1->frame[1] = 60;
 						else entity1->frame[1] = 10;
 
 						//so ataca o player se estiver no salto
@@ -567,7 +567,7 @@ void TimerFunction(int value) {
 
 			case 5: {
 				if (entity1->frame_imunity > 0) entity1->frame_imunity--;
-				else if(entity1->health == 0) {
+				else if (entity1->health == 0) {
 					Map_Increase();
 					Despawn(entity1->slot, 0);
 				}
@@ -609,16 +609,16 @@ void TimerFunction(int value) {
 
 			case 9: {
 				entity1->frame_imunity--;
-				if (entity1->frame_imunity  == 0) {
+				if (entity1->frame_imunity == 0) {
 					Despawn(entity1->slot, 0);
-				}			
+				}
 			} break; //Particle
 			}
 		}
 	}
 
 	//Intervalo entre niveis
-	if (level_isEmpty) { 
+	if (level_isEmpty) {
 		level_frame--;
 		if (level_frame == 0) {
 			level_isEmpty = 0;
@@ -645,7 +645,7 @@ void keyboard(unsigned char key, int x, int y) {
 	case 'S': case 's': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = 0;	PLAYER.direction.y = -1.0f; PLAYER.speed += 1; } break;
 	case 'D': case 'd': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = 1.0f;	PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
 	case 'A': case 'a': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = -1.0f; PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
-	case 'C': case 'c': if (PLAYER.frame[0] == 0) { Spawn(PlayerSword(PLAYER)); PLAYER.frame[0] = 3;	PLAYER.speed += 1;	} break;
+	case 'C': case 'c': if (PLAYER.frame[0] == 0) { Spawn(PlayerSword(PLAYER)); PLAYER.frame[0] = 3;	PLAYER.speed += 1; } break;
 	default: break;
 	}
 	glutPostRedisplay();
@@ -668,7 +668,7 @@ void ChangeSize(GLsizei w, GLsizei h) {
 	// Reset coordinate system
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	
+
 	// Keep the square square, this time, save calculated
 	// width and height for later use
 	if (w <= h) {
@@ -683,7 +683,7 @@ void ChangeSize(GLsizei w, GLsizei h) {
 	// Set the clipping volume
 	glOrtho(0.0f, windowWidth, 0.0f, windowHeight, 0.0f, -250.0f);
 	//glOrtho(0.0f, windowWidth, 0.0f, windowHeight, 1.0f, -1.0f);
-	
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -726,7 +726,7 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(keyboard);
 	glutTimerFunc(30, TimerFunction, 1);
-	
+
 	SetupRC();
 	glutMainLoop();
 }
