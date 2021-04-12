@@ -5,6 +5,8 @@
 #define MAX_ENTITIES 100
 #define BACKGROUND_COLOR 0.0f, 0.8f, 0.8f
 
+GLint isPaused = 1;
+
 // Timer
 GLfloat count_timer = 0;
 // Keep track of windows changing width and height
@@ -201,8 +203,6 @@ void LevelUp() {
 	}
 }
 
-
-
 // Called to draw scene
 void RenderScene(void) {
 	// Clear the window with current clearing color
@@ -216,6 +216,13 @@ void RenderScene(void) {
 			Draw(&entities[i]);
 		}
 	}
+
+	char slevel[10];
+	char scoreString[10] = "Level: ";
+	itoa(level, slevel, 10);
+	strcat(scoreString, slevel);
+
+	write(300, 300, 10, 20, GLUT_BITMAP_TIMES_ROMAN_24, scoreString);
 	// Flush drawing commands
 	glutSwapBuffers();
 }
@@ -646,11 +653,24 @@ void keyboard(unsigned char key, int x, int y) {
 	case 'D': case 'd': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = 1.0f;	PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
 	case 'A': case 'a': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = -1.0f; PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
 	case 'C': case 'c': if (PLAYER.frame[0] == 0) { Spawn(PlayerSword(PLAYER)); PLAYER.frame[0] = 3;	PLAYER.speed += 1; } break;
+	case 'R': case 'r': { map_radius = 70; PLAYER.position.x = ORIGIN; PLAYER.position.y = ORIGIN; LevelUp(); level = 1;  } break;
+	case 'P': case 'p': break; //TODO: PAUSE
+		//TODO: Despawn de tudo antes de respawnar, como esta só da respawn de tudo e acumula com as que ja estavam presentes, ta uma bosta como esta.
 	default: break;
 	}
 	glutPostRedisplay();
 }
 
+void menu(int option) {
+	switch (option) {
+	case 1: break;
+	case 2: break;
+	case 3: keyboard('r', 0, 0); break;
+	case 4: keyboard('p', 0, 0); break; // TODO: pause, talvez sim talvez nao.
+	case 5: exit(1); break;
+	default: break;
+	}
+}
 
 // Setup the rendering state
 void SetupRC(void) {
@@ -720,11 +740,19 @@ int main(int argc, char** argv) {
 		}
 	}*/
 
+	glutCreateMenu(menu);
+	glutAddMenuEntry("CREDITS", 1);
+	glutAddMenuEntry("INSTRUCTIONS", 2);
+	glutAddMenuEntry("RESTART", 3);
+	glutAddMenuEntry("PAUSE", 4);
+	glutAddMenuEntry("EXIT", 5);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(keyboard);
+
 	glutTimerFunc(30, TimerFunction, 1);
 
 	SetupRC();

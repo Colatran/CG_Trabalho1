@@ -1,6 +1,7 @@
 #pragma once
 #include <gl/glut.h>
 #include "Entity.h"
+#include <string.h>
 
 void draw_circle(GLfloat r, GLfloat g, GLfloat b, float radius) {
 	glColor3f(r, g, b);
@@ -1105,7 +1106,17 @@ void draw_hitMarker() {
 
 }
 
-
+void write(int width, int height, int x, int y, void* font, char* string) {
+	float xxx = (float)x;
+	float yyy = (float)y;
+	int len, i;
+	len = (int)strlen(string);
+	glColor3f(1,0,0);
+	glRasterPos2f(xxx, yyy);
+	for (i = 0; i < len; i++) {
+		glutBitmapCharacter(font, string[i]);
+	}
+}
 
 void Draw(struct Entity* entity) {
 	switch (entity->kind) {
