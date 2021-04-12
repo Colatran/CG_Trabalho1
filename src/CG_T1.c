@@ -57,11 +57,6 @@ void Map_Draw() {
 
 		float x, y, percent, color;
 		percent = angle / 3.14f;
-		//color = 0.3f + percent * 0.6f;
-		//glColor3f(0.01f, 0.1f + 0.7f * percent, 0.1f);
-		
-		//glColor3f(0.2f, 0.23f, 0.17f);
-		//glColor3f(0.67f, 0.83f, 0.61f);
 		glColor3f(0.2f + percent * 0.47f, 0.23f + percent * 0.6f, 0.17f + percent * 0.44f);
 
 		x = ORIGIN + sin(angle + 1.56) * map_radius;
@@ -686,8 +681,8 @@ void ChangeSize(GLsizei w, GLsizei h) {
 	}
 
 	// Set the clipping volume
-	//glOrtho(0.0f, windowWidth, 0.0f, windowHeight, 0.0f, -250.0f);
-	glOrtho(0.0f, windowWidth, 0.0f, windowHeight, 1.0f, -1.0f);
+	glOrtho(0.0f, windowWidth, 0.0f, windowHeight, 0.0f, -250.0f);
+	//glOrtho(0.0f, windowWidth, 0.0f, windowHeight, 1.0f, -1.0f);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -706,6 +701,8 @@ int main(int argc, char** argv) {
 
 	//Spawn entities
 	Spawn(Player());
+
+
 
 	/*struct Vector vetor;
 	for (int i1 = 1; i1 < 5; i1++) {

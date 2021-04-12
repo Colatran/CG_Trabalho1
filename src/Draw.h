@@ -1102,17 +1102,17 @@ void Draw(struct Entity* entity) {
 	case 0: //Palyer
 		if (entity->frame[2]) {
 			glScalef(.25f, .25f, 1.0f);
-			glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y);
 			draw_player();
 		}
 		break;
-
+		{
 	case 1: //Enemy Thrower
 		glScalef(.25f, .25f, 1.0f);
 		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_thrower();
 		break;
-
+		
 	case 2: //Enemy Thrower Projectile
 		glScalef(1.0f, 1.0f, 1.0f);
 		glTranslatef(entity->position.x, entity->position.y, 0);
@@ -1136,13 +1136,13 @@ void Draw(struct Entity* entity) {
 		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_pickup();
 		break;
-
+	}
 	case 6: //Jar
 		glScalef(.18f, .18f, 1.0f);
-		glTranslatef(entity->position.x * 5.5, entity->position.y * 5.5, 0);
+		glTranslatef(entity->position.x * 5.5, entity->position.y * 5.5, entity->position.y);
 		draw_jar();
 		break;
-
+		{
 	case 7: //Block
 		if (entity->frame_imunity == 1) {
 			glScalef(.25f, .25f, 1.0f);
@@ -1174,9 +1174,9 @@ void Draw(struct Entity* entity) {
 		glScalef(.25f, .25f, 1.0f);
 		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_hitMarker();
-		break;
+		break; }
 	}
 
-	glMatrixMode(GL_MODELVIEW);
+	//glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
