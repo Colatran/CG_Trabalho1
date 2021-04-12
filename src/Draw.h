@@ -1059,8 +1059,19 @@ void draw_tree() {
 }
 
 void draw_playerSword() {
+	/*
+	//POR ALGUMA RAZÃO, A FUNÇÃO glRectf SO ESTA A FUNCIONAR NO PROJECTO DO FELIX
 	glColor3f(1.0, 1.0, 1.0);
 	glRectf(-1, 0, 1, -20);
+	glEnd();*/
+
+	glColor3f(1.0, 1.0, 1.0);
+	glBegin(GL_POLYGON);
+	glRectf(-1, 0, 1, -20);
+	glVertex2f(-1, 0);
+	glVertex2f(1, 0);
+	glVertex2f(1, -20);
+	glVertex2f(-1, -20);
 	glEnd();
 }
 
