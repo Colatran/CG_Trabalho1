@@ -658,17 +658,42 @@ void keyboard(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 }
 
-void menu(int option) {
+void main_menu(int option) {
 	switch (option) {
-	case 1: break;
-	case 2: break;
-	case 3: keyboard('r', 0, 0); break;
-	case 4: keyboard('p', 0, 0); break; // TODO: pause, talvez sim talvez nao.
-	case 5: exit(1); break;
+	case 1: keyboard('r', 0, 0); break;
+	case 2: keyboard('p', 0, 0); break; // TODO: pause, talvez sim talvez nao.
+	case 3: exit(1); break;
 	default: break;
 	}
+	glutPostRedisplay();
 }
 
+void create_menus() {
+
+	int credits_menu = glutCreateMenu(main_menu);
+	glutAddMenuEntry("Felix Silva", 0);
+	glutAddMenuEntry("Hugo Brites", 0);
+	glutAddMenuEntry("Isaias Silva", 0);
+	glutAddMenuEntry("Ricardo Vieira", 0);
+
+	int instructions_menu = glutCreateMenu(main_menu);
+	glutAddMenuEntry("W - MOVE UP", 0);
+	glutAddMenuEntry("S - MOVE DOWN", 0);
+	glutAddMenuEntry("A - MOVE LEFT", 0);
+	glutAddMenuEntry("D - MOVE LEFT", 0);
+	glutAddMenuEntry("C - ATTACK", 0);
+	glutAddMenuEntry("R - RESET", 0);
+	glutAddMenuEntry("ESQ - EXIT", 0);
+
+	int main_menu_id = glutCreateMenu(main_menu);
+	glutAddSubMenu("CREDITS", credits_menu);
+	glutAddSubMenu("INSTRUCTIONS", instructions_menu);
+	glutAddMenuEntry("RESTART", 1);
+	glutAddMenuEntry("PAUSE", 2);
+	glutAddMenuEntry("EXIT", 3);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+}
 // Setup the rendering state
 void SetupRC(void) {
 	// Set clear color to blue
@@ -737,15 +762,7 @@ int main(int argc, char** argv) {
 		}
 	}*/
 
-	glutCreateMenu(menu);
-	glutAddMenuEntry("CREDITS", 1);
-	glutAddMenuEntry("INSTRUCTIONS", 2);
-	glutAddMenuEntry("RESTART", 3);
-	glutAddMenuEntry("PAUSE", 4);
-	glutAddMenuEntry("EXIT", 5);
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
-
-
+	create_menus();
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(keyboard);
