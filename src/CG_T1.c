@@ -6,6 +6,7 @@
 
 // Timer
 GLfloat count_timer = 0;
+
 // Keep track of windows changing width and height
 GLfloat windowWidth;
 GLfloat windowHeight;
@@ -24,14 +25,13 @@ int level_isEmpty = 1;
 int level_frame = 60;
 
 
-
-
 //Utils
 float RandomFloat(float min, float max) {
 	float random = ((float)rand()) / (float)RAND_MAX;
 	float range = max - min;
 	return (random * range) + min;
 }
+
 struct Vector RandomPosition() {
 	float angle = RandomFloat(0, 360);
 
@@ -104,6 +104,7 @@ void Map_Draw() {
 		glVertex2f(x, y);
 	}
 	glEnd();
+
 	glBegin(GL_TRIANGLE_FAN);
 	glColor3f(0.3f, 0.5f, 0.2f);
 	for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
@@ -116,6 +117,7 @@ void Map_Draw() {
 void Map_Decrease() {
 	if (map_radius > 10) map_radius -= 5.0f;
 }
+
 void Map_Increase() {
 	if (map_radius < 120) map_radius += 5.0f;
 }
@@ -130,11 +132,13 @@ int NextFreeSlot() {
 	}
 	return 100;
 }
+
 void Spawn(struct Entity entity) {
 	int slot = NextFreeSlot();
 	entities[slot] = entity;
 	entities[slot].slot = slot;
 }
+
 void Despawn(int index, int forLevel) {
 	slots[index] = 0;
 
@@ -155,6 +159,7 @@ void Despawn(int index, int forLevel) {
 		if (mapIsEmpty) level_isEmpty = 1;
 	}
 }
+
 void LevelUp() {
 	if (!slots[0]) return;
 
@@ -219,7 +224,16 @@ void RenderScene(void) {
 	itoa(level, slevel, 10);
 	strcat(scoreString, slevel);
 
+	//Draw current level score
 	write(300, 300, 10, 20, GLUT_BITMAP_TIMES_ROMAN_24, scoreString);
+
+	char sscore[20];
+	char bestScoreString[20] = "Best Score: ";
+	itoa(BestScore(), sscore, 10);
+	strcat(bestScoreString, sscore);
+	//Draw Best score
+	write(300, 300, 10, 230, GLUT_BITMAP_TIMES_ROMAN_24, bestScoreString);
+
 	// Flush drawing commands
 	glutSwapBuffers();
 }
@@ -235,7 +249,8 @@ void TimerFunction(int value) {
 			if (Distance(&entity1->position, &vector_origin) > map_radius) {
 				if (entity1->kind != 8) {
 					Despawn(entity1->slot, 1);
-					if (i1 == 0) Spawn(Player());
+					if (i1 == 0)
+						restart();
 				}
 			}
 
@@ -639,6 +654,23 @@ void TimerFunction(int value) {
 	glutTimerFunc(30, TimerFunction, 1);
 }
 
+int BestScore() {
+	int best_score = 0;
+	if (level > best_score)
+		best_score = level;
+	return best_score;
+}
+
+//TODO: Fix restart, nao está a guardar o melhor score a quando o restart.
+int restart() {
+	for (int i = 0; i < MAX_ENTITIES; i++)slots[i] = 0;
+	Spawn(Player());
+	map_radius = 70;
+	PLAYER.position.x = ORIGIN; PLAYER.position.y = ORIGIN;
+	LevelUp(); level = 1;
+	
+	return 1;
+}
 
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
@@ -650,9 +682,8 @@ void keyboard(unsigned char key, int x, int y) {
 	case 'D': case 'd': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = 1.0f;	PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
 	case 'A': case 'a': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = -1.0f; PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
 	case 'C': case 'c': if (PLAYER.frame[0] == 0) { Spawn(PlayerSword(PLAYER)); PLAYER.frame[0] = 3;	PLAYER.speed += 1; } break;
-	case 'R': case 'r': { map_radius = 70; PLAYER.position.x = ORIGIN; PLAYER.position.y = ORIGIN; LevelUp(); level = 1;  } break;
+	case 'R': case 'r': restart();  break;
 	case 'P': case 'p': break; //TODO: PAUSE
-		//TODO: Despawn de tudo antes de respawnar, como esta só da respawn de tudo e acumula com as que ja estavam presentes, ta uma bosta como esta.
 	default: break;
 	}
 	glutPostRedisplay();
@@ -734,7 +765,7 @@ void ChangeSize(GLsizei w, GLsizei h) {
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);      // Initialize GLUT
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(600, 600);
+	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(125, 125);
 	glutCreateWindow("EchoLands");
 
@@ -743,8 +774,6 @@ int main(int argc, char** argv) {
 
 	//Spawn entities
 	Spawn(Player());
-
-
 
 	/*struct Vector vetor;
 	for (int i1 = 1; i1 < 5; i1++) {
