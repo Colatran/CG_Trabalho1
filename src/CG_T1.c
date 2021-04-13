@@ -680,7 +680,7 @@ void create_menus() {
 	glutAddMenuEntry("W - MOVE UP", 0);
 	glutAddMenuEntry("S - MOVE DOWN", 0);
 	glutAddMenuEntry("A - MOVE LEFT", 0);
-	glutAddMenuEntry("D - MOVE LEFT", 0);
+	glutAddMenuEntry("D - MOVE RIGHT", 0);
 	glutAddMenuEntry("C - ATTACK", 0);
 	glutAddMenuEntry("R - RESET", 0);
 	glutAddMenuEntry("ESQ - EXIT", 0);
