@@ -24,6 +24,8 @@ int level = 0;
 int level_isEmpty = 1;
 int level_frame = 60;
 
+// Lost condition
+int isLost = 0;
 
 //Utils
 float RandomFloat(float min, float max) {
@@ -234,6 +236,14 @@ void RenderScene(void) {
 	//Draw Best score
 	write(300, 300, 10, 230, GLUT_BITMAP_TIMES_ROMAN_24, bestScoreString);
 
+	//Draw when lost
+	if (isLost == 1) {
+		write(300, 300, 108, 230, GLUT_BITMAP_TIMES_ROMAN_24, "YOU LOST");
+		isLost = 0;
+		glutSwapBuffers(); 
+		Sleep(1000);
+	}
+
 	// Flush drawing commands
 	glutSwapBuffers();
 }
@@ -249,8 +259,10 @@ void TimerFunction(int value) {
 			if (Distance(&entity1->position, &vector_origin) > map_radius) {
 				if (entity1->kind != 8) {
 					Despawn(entity1->slot, 1);
-					if (i1 == 0)
+					if (i1 == 0) {
 						restart();
+						isLost = 1;
+					}
 				}
 			}
 
@@ -725,11 +737,13 @@ void create_menus() {
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 }
+
 // Setup the rendering state
 void SetupRC(void) {
 	// Set clear color to blue
 	glClearColor(BACKGROUND_COLOR, 1.0f);
 }
+
 // Called by GLUT library when the window has changed size
 void ChangeSize(GLsizei w, GLsizei h) {
 	// Prevent a divide by zero
@@ -792,6 +806,7 @@ int main(int argc, char** argv) {
 	}*/
 
 	create_menus();
+	
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(keyboard);
