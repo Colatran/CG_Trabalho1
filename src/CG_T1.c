@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_NONSTDC_NO_WARNINGS
 #include "Draw.h"
 #define PLAYER entities[0]
 #define PLAYER_MAXSPEED 3
@@ -233,6 +235,7 @@ void RenderScene(void) {
 	char bestScoreString[20] = "Best Score: ";
 	itoa(BestScore(), sscore, 10);
 	strcat(bestScoreString, sscore);
+
 	//Draw Best score
 	write(300, 300, 10, 230, GLUT_BITMAP_TIMES_ROMAN_24, bestScoreString);
 
@@ -704,8 +707,7 @@ void keyboard(unsigned char key, int x, int y) {
 void main_menu(int option) {
 	switch (option) {
 	case 1: keyboard('r', 0, 0); break;
-	case 2: keyboard('p', 0, 0); break; // TODO: pause, talvez sim talvez nao.
-	case 3: exit(1); break;
+	case 2: exit(1); break;
 	default: break;
 	}
 	glutPostRedisplay();
@@ -732,8 +734,7 @@ void create_menus() {
 	glutAddSubMenu("CREDITS", credits_menu);
 	glutAddSubMenu("INSTRUCTIONS", instructions_menu);
 	glutAddMenuEntry("RESTART", 1);
-	glutAddMenuEntry("PAUSE", 2);
-	glutAddMenuEntry("EXIT", 3);
+	glutAddMenuEntry("EXIT", 2);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 }
