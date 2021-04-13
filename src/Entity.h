@@ -16,24 +16,24 @@ struct Entity {
 
 	/// <summary>
 	/// <para>Isto controla o que acontece a duas entidades colidem uma com a outra</para>
-	/// <para>0 rigid			</para>
+	/// <para>0 rigid				</para>
 	/// <para>1 player __ -1 friendly hazard	</para>
 	/// <para>2 hostile__ -2 hostile  hazard	</para>
-	/// <para>3 pickup	</para>
+	/// <para>3 pickup				</para>
 	/// </summary>
 	int surface;
 	float radius;	//collision box radius
 	/// <summary>
-	/// <para>0 player						</para>
-	/// <para>1 enemy thrower				</para>
-	/// <para>2 enemy thrower projectile	</para>
+	/// <para>0 player				</para>
+	/// <para>1 enemy thrower			</para>
+	/// <para>2 enemy thrower projectile		</para>
 	/// <para>3 enemy blob Small			</para>
-	/// <para>4 enemy blob Big				</para>
-	/// <para>5 pickup						</para>
-	/// <para>6 jar							</para>
-	/// <para>7 block						</para>
-	/// <para>8 playerSword					</para>
-	/// <para>9 particle					</para>
+	/// <para>4 enemy blob Big			</para>
+	/// <para>5 pickup				</para>
+	/// <para>6 jar					</para>
+	/// <para>7 block				</para>
+	/// <para>8 playerSword				</para>
+	/// <para>9 particle						</para>
 	/// </summary>
 	int kind;
 	int health;
