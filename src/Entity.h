@@ -54,8 +54,8 @@ float Distance(struct Vector* pointA, struct Vector* pointB) {
 struct Vector SetVectorLength(float x, float y, float length) {
 	float magnitude = sqrt(x * x + y * y);
 	struct Vector vector;
-	vector.x = (x / magnitude) * length/2;
-	vector.y = (y / magnitude) * length/2;
+	vector.x = (x / magnitude) * length / 2;
+	vector.y = (y / magnitude) * length / 2;
 	return vector;
 }
 int IsInsideMyBoundries_Circle(struct Entity* me, struct Entity* him) {

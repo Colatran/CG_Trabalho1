@@ -1111,7 +1111,7 @@ void write(int width, int height, int x, int y, void* font, char* string) {
 	float yyy = (float)y;
 	int len, i;
 	len = (int)strlen(string);
-	glColor3f(1,0,0);
+	glColor3f(1, 0, 0);
 	glRasterPos2f(xxx, yyy);
 	for (i = 0; i < len; i++) {
 		glutBitmapCharacter(font, string[i]);
@@ -1134,7 +1134,7 @@ void Draw(struct Entity* entity) {
 		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_thrower();
 		break;
-		
+
 	case 2: //Enemy Thrower Projectile
 		glScalef(1.0f, 1.0f, 1.0f);
 		glTranslatef(entity->position.x, entity->position.y, 0);
@@ -1158,7 +1158,7 @@ void Draw(struct Entity* entity) {
 		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
 		draw_pickup();
 		break;
-	}
+		}
 	case 6: //Jar
 		glScalef(.18f, .18f, 1.0f);
 		glTranslatef(entity->position.x * 5.5, entity->position.y * 5.5, entity->position.y);
