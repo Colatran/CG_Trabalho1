@@ -5,6 +5,7 @@
 #define PLAYER_MAXSPEED 3
 #define MAX_ENTITIES 100
 #define BACKGROUND_COLOR 0.0f, 0.8f, 0.8f
+#define MAX_Z 250
 
 // Timer
 GLfloat count_timer = 0;
@@ -67,18 +68,18 @@ void Map_Draw() {
 
 		x = ORIGIN + sin(angle + 1.56) * map_radius;
 		y = ORIGIN + cos(angle + 1.56) * map_radius;
-		glVertex2f(x, y);
+		glVertex3f(x, y, MAX_Z);
 		x = ORIGIN + sin(angle + 1.57) * map_radius;
 		y = ORIGIN + cos(angle + 1.57) * map_radius;
-		glVertex2f(x, y);
+		glVertex3f(x, y, MAX_Z);
 
 		glColor3f(BACKGROUND_COLOR);
 		x = ORIGIN + sin(angle + 1.57) * map_radius;
 		y = 50 + cos(angle + 1.57) * map_radius;
-		glVertex2f(x, y);
+		glVertex3f(x, y, MAX_Z);
 		x = ORIGIN + sin(angle + 1.56) * map_radius;
 		y = 50 + cos(angle + 1.56) * map_radius;
-		glVertex2f(x, y);
+		glVertex3f(x, y, MAX_Z);
 
 		glEnd();
 	}
@@ -89,7 +90,7 @@ void Map_Draw() {
 	for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
 		float x = ORIGIN + sin(angle) * map_radius;
 		float y = ORIGIN + cos(angle) * map_radius - 3;
-		glVertex2f(x, y);
+		glVertex3f(x, y, MAX_Z);
 	}
 	glEnd();
 
@@ -98,7 +99,7 @@ void Map_Draw() {
 	for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
 		float x = ORIGIN + sin(angle) * map_radius;
 		float y = ORIGIN + cos(angle) * map_radius;
-		glVertex2f(x, y);
+		glVertex3f(x, y, MAX_Z);
 	}
 	glEnd();
 
@@ -108,7 +109,7 @@ void Map_Draw() {
 	for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
 		float x = ORIGIN + sin(angle) * newRadius;
 		float y = ORIGIN + cos(angle) * newRadius + 1.5;
-		glVertex2f(x, y);
+		glVertex3f(x, y, MAX_Z);
 	}
 	glEnd();
 
@@ -117,7 +118,7 @@ void Map_Draw() {
 	for (float angle = 0.0f; angle < 6.3; angle += 0.1) {
 		float x = ORIGIN + sin(angle) * newRadius;
 		float y = ORIGIN + cos(angle) * newRadius - 1;
-		glVertex2f(x, y);
+		glVertex3f(x, y, MAX_Z);
 	}
 	glEnd();
 }
@@ -234,7 +235,7 @@ int restart() {
 // Called to draw scene
 void RenderScene(void) {
 	// Clear the window with current clearing color
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Draw 
 	Map_Draw();
@@ -749,6 +750,10 @@ void create_menus() {
 void SetupRC(void) {
 	// Set clear color to blue
 	glClearColor(BACKGROUND_COLOR, 1.0f);
+
+	glClearDepth(250.0f);     // Set clear depth value to farthest
+	glEnable(GL_DEPTH_TEST);   // Enables depth-buffer for hidden surface removal
+	glDepthFunc(GL_LEQUAL);    // The type of depth testing to do
 }
 
 // Called by GLUT library when the window has changed size
@@ -763,6 +768,7 @@ void ChangeSize(GLsizei w, GLsizei h) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
+
 	// Keep the square square, this time, save calculated
 	// width and height for later use
 	if (w <= h) {
@@ -776,7 +782,6 @@ void ChangeSize(GLsizei w, GLsizei h) {
 
 	// Set the clipping volume
 	glOrtho(0.0f, windowWidth, 0.0f, windowHeight, 0.0f, -250.0f);
-	//glOrtho(0.0f, windowWidth, 0.0f, windowHeight, 1.0f, -1.0f);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -787,7 +792,7 @@ void ChangeSize(GLsizei w, GLsizei h) {
 // Main program entry point
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);      // Initialize GLUT
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(125, 125);
 	glutCreateWindow("EchoLands");
@@ -798,6 +803,8 @@ int main(int argc, char** argv) {
 	//Spawn entities
 	Spawn(Player());
 
+	//isto cria dois quadrodos de jarras,
+	//serve para testar a colisao da espada
 	/*struct Vector vetor;
 	for (int i1 = 1; i1 < 5; i1++) {
 		vetor.y = i1 * 10 + ORIGIN;
@@ -819,7 +826,6 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(keyboard);
-
 	glutTimerFunc(30, TimerFunction, 1);
 
 	SetupRC();
