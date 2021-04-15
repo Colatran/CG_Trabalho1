@@ -29,6 +29,10 @@ int level_frame = 60;
 // Lost condition
 int isLost = 0;
 
+//Best Score
+int best_score = 0;
+
+
 //Utils
 float RandomFloat(float min, float max) {
 	float random = ((float)rand()) / (float)RAND_MAX;
@@ -670,13 +674,11 @@ void TimerFunction(int value) {
 }
 
 int BestScore() {
-	int best_score = 0;
 	if (level > best_score)
 		best_score = level;
 	return best_score;
 }
 
-//TODO: Fix restart, nao está a guardar o melhor score a quando o restart.
 int restart() {
 	for (int i = 0; i < MAX_ENTITIES; i++)slots[i] = 0;
 	Spawn(Player());
