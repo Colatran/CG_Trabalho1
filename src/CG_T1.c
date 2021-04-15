@@ -39,7 +39,6 @@ float RandomFloat(float min, float max) {
 	float range = max - min;
 	return (random * range) + min;
 }
-
 struct Vector RandomPosition() {
 	float angle = RandomFloat(0, 360);
 
@@ -125,28 +124,25 @@ void Map_Draw() {
 void Map_Decrease() {
 	if (map_radius > 10) map_radius -= 5.0f;
 }
-
 void Map_Increase() {
 	if (map_radius < 120) map_radius += 5.0f;
 }
 
 //Entities
 int NextFreeSlot() {
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < MAX_ENTITIES; i++) {
 		if (slots[i] == 0) {
 			slots[i] = 1;
 			return i;
 		}
 	}
-	return 100;
+	return MAX_ENTITIES;
 }
-
 void Spawn(struct Entity entity) {
 	int slot = NextFreeSlot();
 	entities[slot] = entity;
 	entities[slot].slot = slot;
 }
-
 void Despawn(int index, int forLevel) {
 	slots[index] = 0;
 
@@ -170,10 +166,10 @@ void Despawn(int index, int forLevel) {
 
 void LevelUp() {
 	if (!slots[0]) return;
-
-	int random, i;
 	level++;
+	level_isEmpty = 0;
 
+	int random, i, njarras;
 	//Limpar obstaculos
 	for (i = 1; i < MAX_ENTITIES; i++) {
 		if (slots[i]) {
@@ -201,8 +197,12 @@ void LevelUp() {
 	}
 
 	//Jarras
-	random = rand() % 5;
-	for (i = 0; i <= random; i++) {
+	//Desta forma é mais raro spawnar 2jarras ao mesmo tempo e ainda mais raro 3jarras
+	random = rand() % 100;
+	if (random < 5 || random > 94) njarras = 3;
+	else if (random < 15 || random > 79) njarras = 2;
+	else njarras = 1;
+	for (i = 0; i < njarras; i++) {
 		Spawn(Jar(RandomPosition()));
 	}
 
@@ -212,6 +212,24 @@ void LevelUp() {
 		Spawn(Block(RandomPosition()));
 	}
 }
+int BestScore() {
+	if (level > best_score)
+		best_score = level;
+	return best_score;
+}
+int restart() {
+	for (int i = 0; i < MAX_ENTITIES; i++) slots[i] = 0;
+	Spawn(Player());
+	map_radius = 70;
+
+	level = 0;
+	level_isEmpty = 1;
+	isLost = 0;
+
+	return 1;
+}
+
+
 
 // Called to draw scene
 void RenderScene(void) {
@@ -227,28 +245,23 @@ void RenderScene(void) {
 		}
 	}
 
+	//Draw current level score
 	char slevel[10];
 	char scoreString[10] = "Level: ";
 	itoa(level, slevel, 10);
 	strcat(scoreString, slevel);
+	write(300, 300, 10, 220, GLUT_BITMAP_TIMES_ROMAN_24, scoreString);
 
-	//Draw current level score
-	write(300, 300, 10, 20, GLUT_BITMAP_TIMES_ROMAN_24, scoreString);
-
+	//Draw Best score
 	char sscore[20];
 	char bestScoreString[20] = "Best Score: ";
 	itoa(BestScore(), sscore, 10);
 	strcat(bestScoreString, sscore);
-
-	//Draw Best score
 	write(300, 300, 10, 230, GLUT_BITMAP_TIMES_ROMAN_24, bestScoreString);
 
 	//Draw when lost
-	if (isLost == 1) {
+	if (isLost) {
 		write(300, 300, 108, 230, GLUT_BITMAP_TIMES_ROMAN_24, "YOU LOST");
-		isLost = 0;
-		glutSwapBuffers(); 
-		Sleep(1000);
 	}
 
 	// Flush drawing commands
@@ -266,9 +279,9 @@ void TimerFunction(int value) {
 			if (Distance(&entity1->position, &vector_origin) > map_radius) {
 				if (entity1->kind != 8) {
 					Despawn(entity1->slot, 1);
-					if (i1 == 0) {
-						restart();
+					if (entity1->kind == 0) {
 						isLost = 1;
+						level_frame = 60;
 					}
 				}
 			}
@@ -287,7 +300,7 @@ void TimerFunction(int value) {
 						player_penaltySpeed = 0;
 						entity1->frame_imunity = 30;
 						entity1->frame[1] = 10;
-						Spawn(Particle(entity1->position, 0, 2));
+						Spawn(Particle(entity1->position, 0, 3));
 					}
 				}
 				if (entity1->frame_imunity > 0) {
@@ -307,6 +320,8 @@ void TimerFunction(int value) {
 				float finalSpeed = entity1->speed * player_penaltySpeed * PLAYER_MAXSPEED;
 				entity1->position.x += entity1->direction.x * finalSpeed;
 				entity1->position.y += entity1->direction.y * finalSpeed;
+
+				//Ataque
 				if (entity1->frame[0] > 0) entity1->frame[0]--;
 				else entity1->speed = 0;
 
@@ -406,7 +421,7 @@ void TimerFunction(int value) {
 							} break;
 							case -1: {			//Hit
 								if (entity1->frame_imunity == 0) {
-									Spawn(Particle(entity1->position, 0, 2));
+									Spawn(Particle(entity1->position, 0, 3));
 									entity1->health--;
 									if (entity1->health <= 0) Despawn(entity1->slot, 1);
 									else entity1->frame_imunity = 5;
@@ -506,7 +521,7 @@ void TimerFunction(int value) {
 							} break;
 							case -1: {//Hit
 								if (entity1->frame_imunity == 0) {
-									Spawn(Particle(entity1->position, 0, 2));
+									Spawn(Particle(entity1->position, 0, 3));
 									entity1->health--;
 									if (entity1->health <= 0) Despawn(entity1->slot, 1);
 									else entity1->frame_imunity = 5;
@@ -585,7 +600,7 @@ void TimerFunction(int value) {
 							} break;
 							case -1: {//Hit
 								if (entity1->frame_imunity == 0) {
-									Spawn(Particle(entity1->position, 0, 2));
+									Spawn(Particle(entity1->position, 0, 3));
 									entity1->health--;
 									if (entity1->health <= 0) Despawn(entity1->slot, 1);
 									else entity1->frame_imunity = 5;
@@ -655,13 +670,14 @@ void TimerFunction(int value) {
 		}
 	}
 
-	//Intervalo entre niveis
-	if (level_isEmpty) {
+	//Intervalo entre niveis ou Intervalo depois de perder
+	if (level_isEmpty || isLost) {
 		level_frame--;
 		if (level_frame == 0) {
-			level_isEmpty = 0;
 			level_frame = 60;
-			LevelUp();
+
+			if (isLost) restart();
+			else LevelUp();
 		}
 	}
 
@@ -673,21 +689,7 @@ void TimerFunction(int value) {
 	glutTimerFunc(30, TimerFunction, 1);
 }
 
-int BestScore() {
-	if (level > best_score)
-		best_score = level;
-	return best_score;
-}
 
-int restart() {
-	for (int i = 0; i < MAX_ENTITIES; i++)slots[i] = 0;
-	Spawn(Player());
-	map_radius = 70;
-	PLAYER.position.x = ORIGIN; PLAYER.position.y = ORIGIN;
-	LevelUp(); level = 1;
-	
-	return 1;
-}
 
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
@@ -698,7 +700,7 @@ void keyboard(unsigned char key, int x, int y) {
 	case 'S': case 's': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = 0;	PLAYER.direction.y = -1.0f; PLAYER.speed += 1; } break;
 	case 'D': case 'd': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = 1.0f;	PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
 	case 'A': case 'a': if (PLAYER.frame[0] == 0) { PLAYER.direction.x = -1.0f; PLAYER.direction.y = 0;	PLAYER.speed += 1; } break;
-	case 'C': case 'c': if (PLAYER.frame[0] == 0) { Spawn(PlayerSword(PLAYER)); PLAYER.frame[0] = 3;	PLAYER.speed += 1; } break;
+	case 'C': case 'c': if (PLAYER.frame[0] == 0) { Spawn(PlayerSword(PLAYER)); PLAYER.frame[0] = 4;	PLAYER.speed += 1; } break;
 	case 'R': case 'r': restart();  break;
 	case 'P': case 'p': break; //TODO: PAUSE
 	default: break;
@@ -741,6 +743,8 @@ void create_menus() {
 
 }
 
+
+
 // Setup the rendering state
 void SetupRC(void) {
 	// Set clear color to blue
@@ -777,6 +781,8 @@ void ChangeSize(GLsizei w, GLsizei h) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
+
+
 
 // Main program entry point
 int main(int argc, char** argv) {
