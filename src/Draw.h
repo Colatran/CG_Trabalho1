@@ -1266,7 +1266,7 @@ void Draw(struct Entity* entity) {
 			draw_player();
 		}
 		break;
-		{
+		
 	case 1: //Enemy Thrower
 		glScalef(.25f, .25f, 1.0f);
 		glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
@@ -1296,13 +1296,13 @@ void Draw(struct Entity* entity) {
 		glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
 		draw_pickup();
 		break;
-		}
+		
 	case 6: //Jar
 		glScalef(.18f, .18f, 1.0f);
 		glTranslatef(entity->position.x * 5.5 + 8.0, entity->position.y * 5.5 + 8.0, entity->position.y + 125);
 		draw_jar();
 		break;
-		{
+		
 	case 7: //Block
 		if (entity->frame_imunity == 1) {
 			glScalef(.25f, .25f, 1.0f);
@@ -1330,11 +1330,26 @@ void Draw(struct Entity* entity) {
 		draw_playerSword();
 	} break; //Palyer Sword
 
-	case 9: //HitMarker
-		glScalef(.25f, .25f, 1.0f);
-		glTranslatef(entity->position.x * 4, entity->position.y * 4, .5);
-		draw_hitMarker();
-		break; }
+	case 9: //Particle
+		switch (entity->health) {
+		case 0: //HitMarker
+			glScalef(.25f, .25f, 1.0f);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, .5);
+			draw_hitMarker();
+			break;
+
+		case 1: //Thrower Corpse
+			break;
+		case 2: //BlobSmall Corpse
+			break;
+		case 3: //BlobBig Corpse
+			break;
+		case 4: //BrokenJar
+			break;
+		case 5: //ProjectileGibs
+			break;
+		}
+		break; 
 	}
 
 	//glMatrixMode(GL_MODELVIEW);
