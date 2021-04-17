@@ -133,6 +133,15 @@ struct Entity Block(struct Vector position) {
 	return entity;
 }
 
+/// <summary>
+/// <para>Type:</para>
+/// <para>0 hitMarker			</para>
+/// <para>1 Thrower Corpse		</para>
+/// <para>2 BlobSmall Corpse	</para>
+/// <para>3 BlobBig Corpse		</para>
+/// <para>4 BrokenJar			</para>
+/// <para>5 ProjectileGibs		</para>
+/// </summary>
 struct Entity Particle(struct Vector position, int type, int time) {
 	struct Entity entity;
 	entity.position = position;

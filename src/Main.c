@@ -497,7 +497,10 @@ void TimerFunction(int value) {
 									if (entity1->frame_imunity == 0) {
 										Spawn(Particle(entity1->position, 0, 3));
 										entity1->health--;
-										if (entity1->health <= 0) Despawn(entity1->slot, 1);
+										if (entity1->health <= 0) { 
+											Despawn(entity1->slot, 1);
+											Spawn(Particle(entity1->position, 1, 60));
+										}
 										else entity1->frame_imunity = 5;
 									}
 								} break;
@@ -524,6 +527,7 @@ void TimerFunction(int value) {
 									entity2->health = 0;
 								case -1:
 									Despawn(entity1->slot, 1);
+									Spawn(Particle(entity1->position, 5, 5));
 									break;
 								}
 							}
@@ -597,7 +601,10 @@ void TimerFunction(int value) {
 									if (entity1->frame_imunity == 0) {
 										Spawn(Particle(entity1->position, 0, 3));
 										entity1->health--;
-										if (entity1->health <= 0) Despawn(entity1->slot, 1);
+										if (entity1->health <= 0) { 
+											Despawn(entity1->slot, 1);
+											Spawn(Particle(entity1->position, 2, 60));
+										}
 										else entity1->frame_imunity = 5;
 									}
 								} break;
@@ -676,7 +683,10 @@ void TimerFunction(int value) {
 									if (entity1->frame_imunity == 0) {
 										Spawn(Particle(entity1->position, 0, 3));
 										entity1->health--;
-										if (entity1->health <= 0) Despawn(entity1->slot, 1);
+										if (entity1->health <= 0) { 
+											Despawn(entity1->slot, 1);
+											Spawn(Particle(entity1->position, 3, 60));
+										}
 										else entity1->frame_imunity = 5;
 									}
 								} break;
@@ -704,6 +714,7 @@ void TimerFunction(int value) {
 					if (entity1->health == 0) {
 						Spawn(PickUp(entity1->position));
 						Despawn(entity1->slot, 0);
+						Spawn(Particle(entity1->position, 4, 60));
 					}
 				} break; //Jar
 
