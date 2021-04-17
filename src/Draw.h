@@ -1060,19 +1060,157 @@ void draw_tree() {
 }
 
 void draw_playerSword() {
-	/*
-	//POR ALGUMA RAZÃO, A FUNÇÃO glRectf SO ESTA A FUNCIONAR NO PROJECTO DO FELIX
-	glColor3f(1.0, 1.0, 1.0);
-	glRectf(-1, 0, 1, -20);
-	glEnd();*/
 
-	glColor3f(1.0, 1.0, 1.0);
+	//PUNHO
+	//POMO
+	glColor3f(1, 0.5, 0);
 	glBegin(GL_POLYGON);
-	glRectf(-1, 0, 1, -20);
-	glVertex2f(-1, 0);
-	glVertex2f(1, 0);
-	glVertex2f(1, -20);
-	glVertex2f(-1, -20);
+	glVertex2f(-0.5, 0);
+	glVertex2f(0.5, 0);
+	glVertex2f(0.5, -1);
+	glVertex2f(-0.5, -1);
+	glEnd();
+	//SOMBRA-POMO
+	glColor3f(0, 0.3, 0.6);
+	glBegin(GL_POLYGON);
+	glVertex2f(-0.5, 0);
+	glVertex2f(-0.3, -0.3);
+	glVertex2f(-0.3, -0.7);
+	glVertex2f(-0.5, -1);
+	glEnd();
+	glColor3f(0, 0.2, 0.4);
+	glBegin(GL_POLYGON);
+	glVertex2f(-0.5, 0);
+	glVertex2f(0.5, 0);
+	glVertex2f(0.3, -0.3);
+	glVertex2f(-0.3, -0.3);
+	glEnd();
+	glColor3f(0, 0.4, 0.8);
+	glBegin(GL_POLYGON);
+	glVertex2f(0.5, 0);
+	glVertex2f(0.3, -0.3);
+	glVertex2f(0.3, -0.7);
+	glVertex2f(0.5, -1);
+	glEnd();
+	glColor3f(1, 0.7, 0.4);
+	glBegin(GL_POLYGON);
+	glVertex2f(-0.5, -1);
+	glVertex2f(0.5, -1);
+	glVertex2f(0.3, -0.7);
+	glVertex2f(-0.3, -0.7);
+	glEnd();
+
+	//CABO
+	glColor3f(0.2, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-0.2, -1);
+	glVertex2f(0.2, -1);
+	glVertex2f(0.6, -4);
+	glVertex2f(-0.6, -4);
+	glEnd();
+	glColor3f(0.6, 0.3, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-0.05, -1);
+	glVertex2f(0.05, -1);
+	glVertex2f(0.4, -4);
+	glVertex2f(-0.4, -4);
+	glEnd();
+
+	//CHAPPE
+	glColor3f(1, 0.5, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-1, -4);
+	glVertex2f(1, -4);
+	glVertex2f(1, -6);
+	glVertex2f(-1, -6);
+	glEnd();
+	glColor3f(0.8, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-0.4, -4.6);
+	glVertex2f(0.4, -4.6);
+	glVertex2f(0.4, -5.4);
+	glVertex2f(-0.4, -5.4);
+	glEnd();
+	//SOMBRA-CHAPPE
+	glColor3f(0, 0.3, 0.6);
+	glBegin(GL_POLYGON);
+	glVertex2f(-1, -6);
+	glVertex2f(-0.7, -5.7);
+	glVertex2f(-0.7, -4.3);
+	glVertex2f(-1, -4);
+	glEnd();
+	glColor3f(0, 0.2, 0.4);
+	glBegin(GL_POLYGON);
+	glVertex2f(-1, -4);
+	glVertex2f(1, -4);
+	glVertex2f(0.7, -4.3);
+	glVertex2f(-0.7, -4.3);
+	glEnd();
+	glColor3f(0, 0.4, 0.8);
+	glBegin(GL_POLYGON);
+	glVertex2f(1, -6);
+	glVertex2f(0.7, -5.7);
+	glVertex2f(0.7, -4.3);
+	glVertex2f(1, -4);
+	glEnd();
+	glColor3f(1, 0.7, 0.4);
+	glBegin(GL_POLYGON);
+	glVertex2f(1, -6);
+	glVertex2f(-1, -6);
+	glVertex2f(-0.7, -5.7);
+	glVertex2f(0.7, -5.7);
+	glEnd();
+
+	//GUARDA-MAO
+	glColor3f(1, 0.7, 0.4);
+	glBegin(GL_TRIANGLES);
+	glVertex2f(-4, -6);
+	glVertex2f(-1, -4.3);
+	glVertex2f(-1, -5.6);
+	glEnd();
+	glBegin(GL_TRIANGLES);
+	glVertex2f(4, -6);
+	glVertex2f(1, -4.3);
+	glVertex2f(1, -5.6);
+	glEnd();
+	glColor3f(1, 0.5, 0);
+	glBegin(GL_TRIANGLES);
+	glVertex2f(3.2, -5.7);
+	glVertex2f(1, -4.5);
+	glVertex2f(1, -5.4);
+	glEnd();
+	glBegin(GL_TRIANGLES);
+	glVertex2f(-3.2, -5.7);
+	glVertex2f(-1, -4.5);
+	glVertex2f(-1, -5.4);
+	glEnd();
+
+	//LAMINA
+	glColor3f(0.6, 0.8, 1);
+	glBegin(GL_POLYGON);
+	glVertex2f(-0.6, -6);
+	glVertex2f(0, -6);
+	glVertex2f(0, -20);
+	glVertex2f(-0.6, -19);
+	glEnd();
+	glColor3f(0.8, 0.9, 1);
+	glBegin(GL_POLYGON);
+	glVertex2f(0.6, -6);
+	glVertex2f(0, -6);
+	glVertex2f(0, -20);
+	glVertex2f(0.6, -19);
+	glEnd();
+	glColor3f(0.4, 0.7, 1);
+	glBegin(GL_POLYGON);
+	glVertex2f(0.2, -6);
+	glVertex2f(-0.2, -6);
+	glVertex2f(-0.2, -17);
+	glVertex2f(0.2, -17);
+	glEnd();
+	glBegin(GL_TRIANGLES);
+	glVertex2f(0.2, -17);
+	glVertex2f(-0.2, -17);
+	glVertex2f(0, -19);
 	glEnd();
 }
 
@@ -1185,8 +1323,8 @@ void Draw(struct Entity* entity) {
 		else angle = acos(entity->direction.x);
 		angle = angle * 180.0 / 3.141593 + 67.5 + 45 * entity->frame[0] / 3;
 
-		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x - entity->direction.x * 10, entity->position.y - entity->direction.y * 10, entity->position.y + 125);
+		glScalef(1.5f, 1.5f, 1.0f);
+		glTranslatef((entity->position.x - entity->direction.x * 10) * .75, (entity->position.y - entity->direction.y * 10) * .75, entity->position.y + 125);
 		glRotatef(angle, 0, 0, 1);
 
 		draw_playerSword();
