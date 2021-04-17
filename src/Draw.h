@@ -1324,7 +1324,7 @@ void Draw(struct Entity* entity) {
 		angle = angle * 180.0 / 3.141593 + 67.5 + 45 * entity->frame[0] / 3;
 
 		glScalef(1.5f, 1.5f, 1.0f);
-		glTranslatef((entity->position.x - entity->direction.x * 10) * .75, (entity->position.y - entity->direction.y * 10) * .75, entity->position.y + 125);
+		glTranslatef((entity->position.x - entity->direction.x * 10) * .66667, (entity->position.y - entity->direction.y * 10) * .66667, entity->position.y + 125);
 		glRotatef(angle, 0, 0, 1);
 
 		draw_playerSword();
