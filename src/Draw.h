@@ -1124,57 +1124,57 @@ void Draw(struct Entity* entity) {
 	case 0: //Palyer
 		if (entity->frame[2]) {
 			glScalef(.25f, .25f, 1.0f);
-			glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
 			draw_player();
 		}
 		break;
 		{
 	case 1: //Enemy Thrower
 		glScalef(.25f, .25f, 1.0f);
-		glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
 		draw_thrower();
 		break;
 
 	case 2: //Enemy Thrower Projectile
 		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x, entity->position.y, entity->position.y);
+		glTranslatef(entity->position.x, entity->position.y, entity->position.y + 125);
 		draw_throwerProjectile();
 		break;
 
 	case 3: //Enemy Blob Small
 		glScalef(.25f, .25f, 1.0f);
-		glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
 		draw_blobSmall();
 		break;
 
 	case 4: //Enemy Blob Big
 		glScalef(.5f, .5f, 1.0f);
-		glTranslatef(entity->position.x * 2, entity->position.y * 2, entity->position.y);
+		glTranslatef(entity->position.x * 2, entity->position.y * 2, entity->position.y + 125);
 		draw_blobBig();
 		break;
 
 	case 5: //PickUp
 		glScalef(.25f, .25f, 1.0f);
-		glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
 		draw_pickup();
 		break;
 		}
 	case 6: //Jar
 		glScalef(.18f, .18f, 1.0f);
-		glTranslatef(entity->position.x * 5.5 + 8.0, entity->position.y * 5.5 + 8.0, entity->position.y);
+		glTranslatef(entity->position.x * 5.5 + 8.0, entity->position.y * 5.5 + 8.0, entity->position.y + 125);
 		draw_jar();
 		break;
 		{
 	case 7: //Block
 		if (entity->frame_imunity == 1) {
 			glScalef(.25f, .25f, 1.0f);
-			glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
 			draw_rock();
 		}
 		else
 		{
 			glScalef(.25f, .25f, 1.0f);
-			glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
 			draw_tree();
 		}
 		break;
@@ -1186,7 +1186,7 @@ void Draw(struct Entity* entity) {
 		angle = angle * 180.0 / 3.141593 + 67.5 + 45 * entity->frame[0] / 3;
 
 		glScalef(1.0f, 1.0f, 1.0f);
-		glTranslatef(entity->position.x - entity->direction.x * 10, entity->position.y - entity->direction.y * 10, entity->position.y);
+		glTranslatef(entity->position.x - entity->direction.x * 10, entity->position.y - entity->direction.y * 10, entity->position.y + 125);
 		glRotatef(angle, 0, 0, 1);
 
 		draw_playerSword();
@@ -1194,7 +1194,7 @@ void Draw(struct Entity* entity) {
 
 	case 9: //HitMarker
 		glScalef(.25f, .25f, 1.0f);
-		glTranslatef(entity->position.x * 4, entity->position.y * 4, 0);
+		glTranslatef(entity->position.x * 4, entity->position.y * 4, .5);
 		draw_hitMarker();
 		break; }
 	}

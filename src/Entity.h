@@ -1,7 +1,7 @@
 #pragma once
 #include <math.h>
 #include <stdio.h>
-#define ORIGIN 125 //500 / 4
+//#define ORIGIN 125 //500 / 4
 
 
 struct Vector {
@@ -69,8 +69,8 @@ int IsInsideMyBoundries_Circle(struct Entity* me, struct Entity* him) {
 //Enteties
 struct Entity Player() {
 	struct Entity entity;
-	entity.position.x = ORIGIN;
-	entity.position.y = ORIGIN;
+	entity.position.x = 0;
+	entity.position.y = 0;
 	entity.direction.x = 0;
 	entity.direction.y = -1;
 	entity.speed = 0;
