@@ -305,14 +305,14 @@ void RenderScene(void) {
 
 	//Draw Best score
 	char sscore[20];
-	char bestScoreString[20] = "MelhorPontuacao: ";
+	char bestScoreString[20] = "Melhor Pontuacao: ";
 	itoa(BestScore(), sscore, 10);
 	strcat(bestScoreString, sscore);
 	write(300, 300, -115, 95, GLUT_BITMAP_HELVETICA_18, bestScoreString);
 
 	//Draw when lost
 	if (isLost) {
-		write(300, 300, -15, 105, GLUT_BITMAP_HELVETICA_18, "PERDEU!  XD");
+		write(300, 300, -15, 105, GLUT_BITMAP_HELVETICA_18, "PERDEU!");
 	}
 	if (!running) {
 		write(300, 300, -17, -2, GLUT_BITMAP_HELVETICA_18, "PAUSA - [P]");
@@ -822,8 +822,8 @@ void create_menus() {
 	glutAddMenuEntry("S - Baixo", 0);
 	glutAddMenuEntry("A - Esquerda", 0);
 	glutAddMenuEntry("D - Direita", 0);
-	glutAddMenuEntry("C - Ataque (Deixar pressionado para cometer suicidio)", 0);
-	glutAddMenuEntry("R - Resetar", 0);
+	glutAddMenuEntry("C - Ataque", 0);
+	glutAddMenuEntry("R - Reiniciar", 0);
 	glutAddMenuEntry("P - Pausa", 0);
 	glutAddMenuEntry("ESQ - Sair", 0);
 
@@ -844,7 +844,7 @@ void create_menus() {
 	glutAddSubMenu("CONTROLOS", controls_menu);
 	glutAddSubMenu("INSTRUCOES", instructions_menu);
 	glutAddSubMenu("CREDITOS", credits_menu);
-	glutAddMenuEntry("RESTART", 1);
+	glutAddMenuEntry("REINICIAR", 1);
 	glutAddMenuEntry("SAIR", 2);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
