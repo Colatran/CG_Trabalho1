@@ -799,7 +799,7 @@ void keyboard(unsigned char key, int x, int y) {
 }
 void main_menu(int option) {
 	switch (option) {
-	case 1: keyboard('r', 0, 0); break;
+	case 1: restart(); break;
 	case 2: exit(1); break;
 	default: break;
 	}

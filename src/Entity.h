@@ -1,7 +1,6 @@
 #pragma once
 #include <math.h>
 #include <stdio.h>
-//#define ORIGIN 125 //500 / 4
 
 
 struct Vector {
