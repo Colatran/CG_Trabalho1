@@ -30,7 +30,7 @@ int isLost = 0;
 int best_score = 0;
 int running = 0; //oposto de pause
 int finst = 1; //primeira instrucao
-
+int fullScreen = 1;
 
 
 //Utils
@@ -919,9 +919,10 @@ void ChangeSize(GLsizei w, GLsizei h) {
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);      // Initialize GLUT
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(800, 720);
-	glutInitWindowPosition(25, 25);
+	//glutInitWindowSize(800, 720);
+	//glutInitWindowPosition(25, 25);
 	glutCreateWindow("EchoLands");
+	glutFullScreen();
 
 	vector_origin.x = 0;
 	vector_origin.y = 0;
