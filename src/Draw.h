@@ -1646,6 +1646,12 @@ void Draw(struct Entity* entity) {
 			break;
 
 		case 5: //ProjectileGibs
+			glScalef(.125f, .125f, 1.0f);
+			glTranslatef(entity->position.x * 8, entity->position.y * 8, entity->position.y + 125);
+			draw_hitMarker();
+			glRotatef(45, 0, 0, 1);
+			draw_hitMarker();
+			break;
 			break;
 		}
 		break; 

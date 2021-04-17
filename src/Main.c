@@ -297,15 +297,15 @@ void RenderScene(void) {
 
 	
 	//Draw current level score
-	char slevel[10];
-	char scoreString[10] = "Nivel: ";
+	char slevel[20];
+	char scoreString[20] = "Nivel: ";
 	itoa(level, slevel, 10);
 	strcat(scoreString, slevel);
 	write(300, 300, -115, 85, GLUT_BITMAP_HELVETICA_18, scoreString);
 
 	//Draw Best score
-	char sscore[20];
-	char bestScoreString[20] = "Melhor Pontuacao: ";
+	char sscore[30];
+	char bestScoreString[30] = "Melhor Pontuacao: ";
 	itoa(BestScore(), sscore, 10);
 	strcat(bestScoreString, sscore);
 	write(300, 300, -115, 95, GLUT_BITMAP_HELVETICA_18, bestScoreString);
@@ -527,7 +527,7 @@ void TimerFunction(int value) {
 									entity2->health = 0;
 								case -1:
 									Despawn(entity1->slot, 1);
-									Spawn(Particle(entity1->position, 5, 5));
+									Spawn(Particle(entity1->position, 5, 3));
 									break;
 								}
 							}
@@ -598,15 +598,9 @@ void TimerFunction(int value) {
 									entity1->position.y = entity2->position.y + vector.y;
 								} break;
 								case -1: {//Hit
-									if (entity1->frame_imunity == 0) {
-										Spawn(Particle(entity1->position, 0, 3));
-										entity1->health--;
-										if (entity1->health <= 0) { 
-											Despawn(entity1->slot, 1);
-											Spawn(Particle(entity1->position, 2, 60));
-										}
-										else entity1->frame_imunity = 5;
-									}
+									Spawn(Particle(entity1->position, 0, 3));
+									Despawn(entity1->slot, 1);
+									Spawn(Particle(entity1->position, 2, 60));
 								} break;
 								case 1:
 									if (entity1->frame[2] == 1) {
@@ -778,13 +772,36 @@ void TimerFunction(int value) {
 
 
 
+void SpecialKeys(int key, int x, int y) {
+	if (key == GLUT_KEY_UP) {
+		PLAYER.direction.x = 0;
+		PLAYER.direction.y = 1.0f;
+		PLAYER.speed += 1;
+	}
+
+	if (key == GLUT_KEY_DOWN) {
+		PLAYER.direction.x = 0;
+		PLAYER.direction.y = -1.0f;
+		PLAYER.speed += 1;
+	}
+
+	if (key == GLUT_KEY_LEFT) {
+		PLAYER.direction.x = -1.0f;
+		PLAYER.direction.y = 0;
+		PLAYER.speed += 1;
+	}
+
+	if (key == GLUT_KEY_RIGHT) {
+		PLAYER.direction.x = 1.0f;
+		PLAYER.direction.y = 0;
+		PLAYER.speed += 1;
+	}
+
+	glutPostRedisplay();
+}
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 27: exit(0); break;
-
-	case '1': Map_Decrease(); break;
-	case '2': Map_Increase(); break;
-
 	case 'P': case 'p': {
 		if (running) running = 0;
 		else { 
@@ -796,11 +813,15 @@ void keyboard(unsigned char key, int x, int y) {
 
 	if (running && PLAYER.frame[0] == 0){
 		switch (key) {
-		case 'W': case 'w': { PLAYER.direction.x = 0;		PLAYER.direction.y = 1.0f;	PLAYER.speed += 1; } break;
-		case 'S': case 's': { PLAYER.direction.x = 0;		PLAYER.direction.y = -1.0f; PLAYER.speed += 1; } break;
-		case 'D': case 'd': { PLAYER.direction.x = 1.0f;	PLAYER.direction.y = 0;		PLAYER.speed += 1; } break;
-		case 'A': case 'a': { PLAYER.direction.x = -1.0f;	PLAYER.direction.y = 0;		PLAYER.speed += 1; } break;
-		case 'C': case 'c': { Spawn(PlayerSword(PLAYER));	PLAYER.frame[0] = 4;		PLAYER.speed += 1; } break;
+		case 'W': case 'w': SpecialKeys(GLUT_KEY_UP , 0, 0); break;
+		case 'S': case 's': SpecialKeys(GLUT_KEY_DOWN, 0, 0); break;
+		case 'D': case 'd': SpecialKeys(GLUT_KEY_RIGHT, 0, 0); break;
+		case 'A': case 'a': SpecialKeys(GLUT_KEY_LEFT, 0, 0); break;
+		case 'C': case 'c': { 
+			Spawn(PlayerSword(PLAYER));
+			PLAYER.frame[0] = 4;
+			PLAYER.speed += 1; 
+		} break;
 		case 'R': case 'r': restart();  break;
 		default: break;
 		}
@@ -931,6 +952,7 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(keyboard);
+	glutSpecialFunc(SpecialKeys);
 	glutTimerFunc(30, TimerFunction, 1);
 
 	SetupRC();
