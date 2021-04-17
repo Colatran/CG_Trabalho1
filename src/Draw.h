@@ -503,6 +503,99 @@ void draw_thrower() {
 
 }
 
+void draw_skelet_gib(void) {
+	//SOMBRA
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 20 + 20;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+	//OMBROS
+	glColor3f(0.3, 0.3, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 15);
+	glVertex2f(-35, 15);
+	glVertex2f(-35, 30);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(20, 27);
+	glVertex2f(20, 42);
+	glVertex2f(35, 42);
+	glEnd();
+
+	//TORSO
+	glColor3f(0.5, 0.5, 0.5);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 45);
+	glVertex2f(20, 45);
+	glVertex2f(20, 25);
+	glVertex2f(10, 15);
+	glVertex2f(-10, 15);
+	glVertex2f(-20, 25);
+	glEnd();
+	glColor3f(0.3, 0.3, 0.3);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 25);
+	glVertex2f(20, 25);
+	glVertex2f(10, 15);
+	glVertex2f(-10, 15);
+	glEnd();
+	//PEITOS
+	glColor3f(0.5, 0.5, 0.5);
+	glBegin(GL_POLYGON);
+	glVertex2f(-10, 20);
+	glVertex2f(0, 22.5);
+	glVertex2f(0, 25);
+	glVertex2f(-20, 25);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 20);
+	glVertex2f(0, 22.5);
+	glVertex2f(0, 25);
+	glVertex2f(20, 25);
+	glEnd();
+
+	//CABEÇA
+	glColor3f(0.75, 0.75, 0.75);
+	glBegin(GL_POLYGON);
+	glVertex2f(10, 55);
+	glVertex2f(10, 30);
+	glVertex2f(-10, 30);
+	glVertex2f(-10, 55);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(5, 30);
+	glVertex2f(5, 25);
+	glVertex2f(-5, 25);
+	glVertex2f(-5, 30);
+	glEnd();
+
+	glColor3f(1, 1, 1);
+	glBegin(GL_POLYGON);
+	glVertex2f(-1, 40);
+	glVertex2f(-12, 40);
+	glVertex2f(-10, 45);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(1, 40);
+	glVertex2f(12, 40);
+	glVertex2f(10, 45);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-7, 53);
+	glVertex2f(7, 53);
+	glVertex2f(7, 47);
+	glVertex2f(0, 43);
+	glVertex2f(-7, 47);
+	glVertex2f(-7, 53);
+	glEnd();
+
+}
+
 void draw_throwerProjectile() {
 	draw_circle(1.0f, 0.0f, 0.0f, 5);
 }
@@ -609,6 +702,66 @@ void draw_blobSmall() {
 
 }
 
+void draw_blob_red_gib(void)
+{
+	//SOMBRA
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 10;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+	//CORPO
+	glColor3f(0.6, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 15);
+	glVertex2f(25, 10);
+	glVertex2f(15, 0);
+	glVertex2f(-15, 0);
+	glVertex2f(-25, 10);
+	glEnd();
+
+	//olhos fechados
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	glVertex2f(4, 12);
+	glVertex2f(8, 10);
+	glBegin(GL_LINES);
+	glVertex2f(8, 12);
+	glVertex2f(4, 10);
+	glBegin(GL_LINES);
+	glVertex2f(-4, 12);
+	glVertex2f(-8, 10);
+	glVertex2f(-4, 10);
+	glVertex2f(-8, 12);
+	glEnd();
+
+	//SOMBRA
+	glColor3f(0.4, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-25, 10);
+	glVertex2f(-15, 0);
+	glVertex2f(-10, 5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-15, 0);
+	glVertex2f(15, 0);
+	glVertex2f(15, 5);
+	glVertex2f(-15, 5);
+	glEnd();
+
+	glColor3f(0.6, 0, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(25, 10);
+	glVertex2f(15, 0);
+	glVertex2f(10, 5);
+	glEnd();
+
+}
+
 void draw_blobBig() {
 	//SOMBRA
 	glColor3f(0.0, 0.0, 0.0);
@@ -709,6 +862,65 @@ void draw_blobBig() {
 	glVertex2f(0, 15);
 	glEnd();
 
+}
+
+void draw_blob_green_gib(void)
+{
+	//SOMBRA
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 20;
+		float y = cos(angle) * 10;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+	//CORPO
+	glColor3f(0.02, 0.4, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 15);
+	glVertex2f(25, 10);
+	glVertex2f(15, 0);
+	glVertex2f(-15, 0);
+	glVertex2f(-25, 10);
+	glEnd();
+
+	//olhos fechados
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	glVertex2f(4, 12);
+	glVertex2f(8, 10);
+	glBegin(GL_LINES);
+	glVertex2f(8, 12);
+	glVertex2f(4, 10);
+	glBegin(GL_LINES);
+	glVertex2f(-4, 12);
+	glVertex2f(-8, 10);
+	glVertex2f(-4, 10);
+	glVertex2f(-8, 12);
+	glEnd();
+
+	//SOMBRA
+	glColor3f(0.09, 0.2, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-25, 10);
+	glVertex2f(-15, 0);
+	glVertex2f(-10, 5);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(-15, 0);
+	glVertex2f(15, 0);
+	glVertex2f(15, 5);
+	glVertex2f(-15, 5);
+	glEnd();
+
+	glColor3f(0.09, 0.3, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(25, 10);
+	glVertex2f(15, 0);
+	glVertex2f(10, 5);
+	glEnd();
 }
 
 void draw_pickup() {
@@ -886,14 +1098,83 @@ void draw_jar() {
 	glEnd();
 }
 
+void draw_jar_gib(void)
+{
+	//SOMBRA
+	glColor3f(0, 0, 0);
+	glBegin(GL_TRIANGLE_FAN);
+	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
+		float x = sin(angle) * 27.5;
+		float y = cos(angle) * 27.5;
+		glVertex2f(x, y);
+	}
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glColor3f(0.6, 0.3, 0);
+	glVertex2f(-30, 10);
+	glVertex2f(-30, 40);
+	glVertex2f(-20, 30);
+	glVertex2f(-10, 45);
+	glVertex2f(-5, 35);
+	glVertex2f(0, 25);
+	glVertex2f(10, 35);
+	glVertex2f(20, 20);
+	glVertex2f(30, 40);
+	glVertex2f(30, 20);
+	glVertex2f(30, 10);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glColor3f(0.8, 0.4, 0);
+	glVertex2f(-30, 10);
+	glVertex2f(-30, 20);
+	glVertex2f(30, 20);
+	glVertex2f(30, 10);
+	glEnd();
+
+	glColor3f(0.6, 0.3, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-20, 0);
+	glVertex2f(-30, 10);
+	glVertex2f(30, 10);
+	glVertex2f(20, 0);
+	glEnd();
+
+	glColor3f(0.19, 0.34, 0.41);
+	glBegin(GL_POLYGON);
+	glVertex2f(-35, 15);
+	glVertex2f(-35, 25);
+	glVertex2f(35, 25);
+	glVertex2f(35, 15);
+	glEnd();
+
+
+	glBegin(GL_POLYGON);
+	glVertex2f(-25, 15);
+	glVertex2f(-25, 25);
+	glVertex2f(-15, 25);
+	glVertex2f(-15, 15);
+	glEnd();
+
+	glColor3f(0.8, 0.8, 0.8);
+	glBegin(GL_POLYGON);
+	glVertex2f(-25, 15);
+	glVertex2f(-25, 25);
+	glVertex2f(-15, 25);
+	glVertex2f(-15, 15);
+	glEnd();
+
+}
+
 void draw_rock() {
 
 	//SOMBRA
 	glColor3f(0, 0, 0);
 	glBegin(GL_TRIANGLE_FAN);
 	for (float angle = 0.0f; angle < 2 * 3.14159; angle += 0.1) {
-		float x = sin(angle) * 20;
-		float y = cos(angle) * 20;
+		float x = sin(angle) * 30;
+		float y = cos(angle) * 25;
 		glVertex2f(x, y);
 	}
 	glEnd();
@@ -1244,6 +1525,7 @@ void draw_hitMarker() {
 
 }
 
+
 void write(int width, int height, int x, int y, void* font, char* string) {
 	float xxx = (float)x;
 	float yyy = (float)y;
@@ -1255,6 +1537,7 @@ void write(int width, int height, int x, int y, void* font, char* string) {
 		glutBitmapCharacter(font, string[i]);
 	}
 }
+
 
 void Draw(struct Entity* entity) {
 	switch (entity->kind) {
@@ -1339,13 +1622,29 @@ void Draw(struct Entity* entity) {
 			break;
 
 		case 1: //Thrower Corpse
+			glScalef(.25f, .25f, 1.0f);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
+			draw_skelet_gib();
 			break;
+
 		case 2: //BlobSmall Corpse
+			glScalef(.25f, .25f, 1.0f);
+			glTranslatef(entity->position.x * 4, entity->position.y * 4, entity->position.y + 125);
+			draw_blob_red_gib();
 			break;
+
 		case 3: //BlobBig Corpse
+			glScalef(.5f, .5f, 1.0f);
+			glTranslatef(entity->position.x * 2, entity->position.y * 2, entity->position.y + 125);
+			draw_blob_green_gib();
 			break;
+
 		case 4: //BrokenJar
+			glScalef(.18f, .18f, 1.0f);
+			glTranslatef(entity->position.x * 5.5 + 8.0, entity->position.y * 5.5 + 8.0, entity->position.y + 125);
+			draw_jar_gib();
 			break;
+
 		case 5: //ProjectileGibs
 			break;
 		}
