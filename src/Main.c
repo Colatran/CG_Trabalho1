@@ -801,6 +801,17 @@ void SpecialKeys(int key, int x, int y) {
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 27: exit(0); break;
+	case '1': Map_Decrease(); break;
+	case '2': Map_Increase(); break;
+	case 'f': case 'F':
+	    if(!fullScreen){
+	        glutFullScreen();
+	        fullScreen = 1;
+	    } else if(fullScreen) {
+	        glutPositionWindow(200,100);
+	        glutReshapeWindow(800,800);
+	        fullScreen = 0;
+	    } break;
 	case 'P': case 'p': {
 		if (running) running = 0;
 		else { 
@@ -845,6 +856,7 @@ void create_menus() {
 	glutAddMenuEntry("C - Ataque", 0);
 	glutAddMenuEntry("R - Reiniciar", 0);
 	glutAddMenuEntry("P - Pausa", 0);
+	glutAddMenuEntry("F - Janela/Fullscren",0);
 	glutAddMenuEntry("ESQ - Sair", 0);
 
 	int instructions_menu = glutCreateMenu(main_menu);
