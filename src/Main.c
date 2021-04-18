@@ -848,6 +848,7 @@ void main_menu(int option) {
 	case 1: restart(); break;
 	case 2: exit(1); break;
 	case 3: keyboard('f', 0, 0); break;
+	case 4: keyboard('p',0,0); break;
 	default: break;
 	}
 	glutPostRedisplay();
@@ -882,6 +883,7 @@ void create_menus() {
 	glutAddSubMenu("INSTRUCOES", instructions_menu);
 	glutAddSubMenu("CREDITOS", credits_menu);
 	glutAddMenuEntry("JANELA/FULLSCREEN", 3);
+	glutAddMenuEntry("PAUSA",4);
 	glutAddMenuEntry("REINICIAR", 1);
 	glutAddMenuEntry("SAIR", 2);
 
