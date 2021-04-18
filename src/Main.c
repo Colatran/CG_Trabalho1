@@ -30,6 +30,8 @@ int isLost = 0;
 int best_score = 0;
 int running = 0; //oposto de pause
 int finst = 1; //primeira instrucao
+int fullScreen = 1;
+
 
 
 //Utils
@@ -131,7 +133,7 @@ void Draw_TorreFundo(float radius, float xOrigin, float yOrigin, float height) {
 	//Torre
 	for (float angle = 0.15f; angle < 3.14f; angle += 0.15f) {
 		glBegin(GL_POLYGON);
-		
+
 		float x, y, percent, color;
 		percent = angle / 3.14f;
 		glColor3f(0.59f + percent * 0.08f, 0.87f + percent * 0.05f, 0.77f + percent * 0.03f);
@@ -294,7 +296,7 @@ void RenderScene(void) {
 		}
 	}
 
-	
+
 	//Draw current level score
 	char slevel[20];
 	char scoreString[20] = "Nivel: ";
@@ -496,7 +498,7 @@ void TimerFunction(int value) {
 									if (entity1->frame_imunity == 0) {
 										Spawn(Particle(entity1->position, 0, 3));
 										entity1->health--;
-										if (entity1->health <= 0) { 
+										if (entity1->health <= 0) {
 											Despawn(entity1->slot, 1);
 											Spawn(Particle(entity1->position, 1, 60));
 										}
@@ -676,7 +678,7 @@ void TimerFunction(int value) {
 									if (entity1->frame_imunity == 0) {
 										Spawn(Particle(entity1->position, 0, 3));
 										entity1->health--;
-										if (entity1->health <= 0) { 
+										if (entity1->health <= 0) {
 											Despawn(entity1->slot, 1);
 											Spawn(Particle(entity1->position, 3, 60));
 										}
@@ -764,7 +766,7 @@ void TimerFunction(int value) {
 
 		// Redraw the scene with new coordinates
 		glutPostRedisplay();
-    }
+	}
 
 	glutTimerFunc(30, TimerFunction, 1);
 }
@@ -803,22 +805,25 @@ void keyboard(unsigned char key, int x, int y) {
 	case 27: exit(0); break;
 	case '1': Map_Decrease(); break;
 	case '2': Map_Increase(); break;
-	case 'f': case 'F':
-	    if(!fullScreen){
-	        glutFullScreen();
-	        fullScreen = 1;
-	    } else if(fullScreen) {
-	        glutPositionWindow(200,100);
-	        glutReshapeWindow(800,800);
-	        fullScreen = 0;
-	    } break;
+	case 'F': case 'f': {
+		if (fullScreen) {
+			glutPositionWindow(25, 25);
+			glutReshapeWindow(1080, 600);
+			fullScreen = 0;
+		}
+		else {
+			glutFullScreen();
+			fullScreen = 1;
+		}
+	} break;
 	case 'P': case 'p': {
 		if (running) running = 0;
-		else { 
+		else {
 			running = 1;
 			finst = 0;
 		}
 	} break;
+	case 'R': case 'r': restart();  break;
 	}
 
 	if (running && PLAYER.frame[0] == 0){
@@ -827,12 +832,11 @@ void keyboard(unsigned char key, int x, int y) {
 		case 'S': case 's': SpecialKeys(GLUT_KEY_DOWN, 0, 0); break;
 		case 'D': case 'd': SpecialKeys(GLUT_KEY_RIGHT, 0, 0); break;
 		case 'A': case 'a': SpecialKeys(GLUT_KEY_LEFT, 0, 0); break;
-		case 'C': case 'c': { 
+		case 'C': case 'c': {
 			Spawn(PlayerSword(PLAYER));
 			PLAYER.frame[0] = 4;
-			PLAYER.speed += 1; 
+			PLAYER.speed += 1;
 		} break;
-		case 'R': case 'r': restart();  break;
 		default: break;
 		}
 	}
@@ -843,6 +847,7 @@ void main_menu(int option) {
 	switch (option) {
 	case 1: restart(); break;
 	case 2: exit(1); break;
+	case 3: keyboard('f', 0, 0); break;
 	default: break;
 	}
 	glutPostRedisplay();
@@ -856,7 +861,7 @@ void create_menus() {
 	glutAddMenuEntry("C - Ataque", 0);
 	glutAddMenuEntry("R - Reiniciar", 0);
 	glutAddMenuEntry("P - Pausa", 0);
-	glutAddMenuEntry("F - Janela/Fullscren",0);
+	glutAddMenuEntry("F - Janela/Fullscren", 0);
 	glutAddMenuEntry("ESQ - Sair", 0);
 
 	int instructions_menu = glutCreateMenu(main_menu);
@@ -876,6 +881,7 @@ void create_menus() {
 	glutAddSubMenu("CONTROLOS", controls_menu);
 	glutAddSubMenu("INSTRUCOES", instructions_menu);
 	glutAddSubMenu("CREDITOS", credits_menu);
+	glutAddMenuEntry("JANELA/FULLSCREEN", 3);
 	glutAddMenuEntry("REINICIAR", 1);
 	glutAddMenuEntry("SAIR", 2);
 
@@ -941,7 +947,7 @@ int main(int argc, char** argv) {
 	Spawn(Player());
 
 	create_menus();
-	
+
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);
 	glutKeyboardFunc(keyboard);
