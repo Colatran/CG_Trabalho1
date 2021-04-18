@@ -30,7 +30,6 @@ int isLost = 0;
 int best_score = 0;
 int running = 0; //oposto de pause
 int finst = 1; //primeira instrucao
-int fullScreen = 1;
 
 
 //Utils
@@ -930,25 +929,6 @@ int main(int argc, char** argv) {
 	Spawn(Player());
 
 	create_menus();
-
-	//isto cria dois quadrodos de jarras,
-	//serve para testar a colisao da espada
-	/*struct Vector vetor;
-	for (int i1 = 1; i1 < 5; i1++) {
-		vetor.y = i1 * 10;
-		for (int i2 = 1; i2 < 5; i2++) {
-			vetor.x = i2 * 10;
-			Spawn(Jar(vetor));
-		}
-	}
-	for (int i1 = -1; i1 > -5; i1--) {
-		vetor.y = i1 * 10;
-		for (int i2 = 1; i2 < 5; i2++) {
-			vetor.x = i2 * 10;
-			Spawn(Jar(vetor));
-		}
-	}*/
-
 	
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(ChangeSize);

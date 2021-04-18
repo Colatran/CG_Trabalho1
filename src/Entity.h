@@ -165,7 +165,7 @@ struct Entity Thrower(struct Vector position) {
 	entity.surface = 2;
 	entity.radius = 10;
 	entity.kind = 1;
-	entity.health = 3;
+	entity.health = 2;
 
 	entity.frame_imunity = 0;
 	entity.frame[0] = 4;
