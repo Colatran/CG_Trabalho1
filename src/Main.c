@@ -862,7 +862,7 @@ void create_menus() {
 	glutAddMenuEntry("C - Ataque", 0);
 	glutAddMenuEntry("R - Reiniciar", 0);
 	glutAddMenuEntry("P - Pausa", 0);
-	glutAddMenuEntry("F - Janela/Fullscren", 0);
+	glutAddMenuEntry("F - Janela/Fullscren", 0); //
 	glutAddMenuEntry("ESQ - Sair", 0);
 
 	int instructions_menu = glutCreateMenu(main_menu);
